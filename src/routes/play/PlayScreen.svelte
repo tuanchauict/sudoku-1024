@@ -1,47 +1,16 @@
 <script lang="ts">
-	import Board from './Board.svelte';
+	import PlayBoard from './PlayBoard.svelte';
 	import Digits from './Digits.svelte';
 	import Actions from './Actions.svelte';
 	import { goto } from '$app/navigation';
-	import type { Digit, Level } from '$lib/repository';
+	import type { Board, Digit, Level } from '$lib/repository';
 
 
 	export let levelId: Level;
-
-
-	// Parse the initial board from string
-	const initialBoardString = `
-  .4.5..2.6
-  ...1....5
-  .5..9...4
-  ...45....
-  .97.6....
-  43.......
-  .1.......
-  96..2...3
-  7.3..6.9.
-    `.trim();
-
-	function parseInitialBoard(boardStr: string) {
-		const board = Array(9)
-			.fill(null)
-			.map(() => Array(9).fill(null));
-
-		const rows = boardStr.split('\n');
-		for (let i = 0; i < 9; i++) {
-			for (let j = 0; j < 9; j++) {
-				const char = rows[i][j];
-				if (char !== '.') {
-					board[i][j] = parseInt(char, 10);
-				}
-			}
-		}
-
-		return board;
-	}
+	export let initialBoard: Board;
 
 	// Initialize the board and notes
-	let board = parseInitialBoard(initialBoardString);
+	let board = initialBoard;
 	let notes = Array(9)
 		.fill(null)
 		.map(() =>
@@ -91,7 +60,7 @@
 		const { row, col } = selectedCell;
 		if (row === -1 || col === -1) return;
 
-		board[row][col] = null;
+		board[row][col] = 0;
 		notes[row][col] = Array(9).fill(false);
 
 		// Force reactivity
@@ -120,14 +89,14 @@
 <div class="container">
 	<div class="header">
 		<button class="back-btn" on:click={goBack}> ← Back </button>
-		<h1>Level {levelId}</h1>
+		<h1>{levelId}</h1>
 	</div>
 
 	<div class="tip">
 		Tip: Select a cell and press 1-9 to enter values. Use note mode for candidates.
 	</div>
 
-	<Board {board} {notes} {selectedCell} onCellSelect={handleCellSelect} />
+	<PlayBoard {board} {notes} {selectedCell} onCellSelect={handleCellSelect} />
 
 	<Digits {board} onDigit={handleNumberInput} />
 

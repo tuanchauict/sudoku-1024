@@ -34,7 +34,8 @@
 	];
 
 	function selectLevel(levelId: Level) {
-		goto(`/play?level=${levelId}`);
+		const dummyBoard = '.9.3.6..4.....5.9....2.....3............8...1.2.9.35....35..1..6.......85.81.46..';
+		goto(`/play?level=${levelId}&board=${dummyBoard}`);
 	}
 </script>
 
