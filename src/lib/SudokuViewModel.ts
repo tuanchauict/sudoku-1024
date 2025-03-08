@@ -32,6 +32,9 @@ export class SudokuViewModel {
     public readonly cellEditable: Readable<boolean>;
     public readonly violatedCells: Readable<CellPosition[]>;
 
+    // Public stores for game completion
+    public gameComplete: Writable<boolean>;
+
     constructor(levelId: Level, public initialBoard: Board) {
         // Initialize the state
         this.state = writable<SudokuState>({
@@ -50,7 +53,7 @@ export class SudokuViewModel {
         });
 
         // Create derived stores for each piece of state
-        
+
         this.board = derived(this.state, ($state) => $state.board);
         this.notes = derived(this.state, ($state) => $state.notes);
         this.selectedCell = derived(this.state, ($state) => $state.selectedCell);
@@ -62,6 +65,9 @@ export class SudokuViewModel {
         this.valueCounts = derived(this.board, ($board) => this.calculateValueCounts($board));
         this.cellEditable = derived(this.selectedCell, ($selectedCell) => this.isEditableCell($selectedCell.row, $selectedCell.col));
         this.violatedCells = derived(this.board, ($board) => this.findViolatedCells($board));
+
+        // Game completion
+        this.gameComplete = writable(false);
     }
 
     public selectCell(row: number, col: number): void {
@@ -103,6 +109,9 @@ export class SudokuViewModel {
                 notes: newNotes
             };
         });
+
+        // Check if the game is complete
+        this.updateCompleteState();
     }
 
     // Clear the selected cell
@@ -132,6 +141,7 @@ export class SudokuViewModel {
                 notes: newNotes
             };
         });
+        this.gameComplete.set(false);
     }
 
     // Helper methods for computed values
@@ -259,5 +269,31 @@ export class SudokuViewModel {
             }
         }
         return violations;
+    }
+
+    private updateCompleteState() {
+        let currentBoard: Board | undefined;
+        const unsubscribe = this.board.subscribe(value => {
+            currentBoard = value;
+        });
+        unsubscribe();
+
+        if (!currentBoard) {
+            return
+        };
+
+        const isFill = currentBoard.every(row => row.every(cell => cell > 0));
+        if (!isFill) {
+            this.gameComplete.set(false);
+            return;
+        }
+
+        const hasViolations = this.findViolatedCells(currentBoard).length > 0;
+        if (hasViolations) {
+            this.gameComplete.set(false);
+            return;
+        }
+
+        this.gameComplete.set(true);
     }
 }

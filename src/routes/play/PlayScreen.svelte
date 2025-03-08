@@ -6,6 +6,7 @@
 	import { SudokuViewModel } from '$lib/SudokuViewModel';
 	import { onMount } from 'svelte';
 	import { setSudokuViewModel } from '$lib/sudokuContext';
+	import GameCompleteScreen from './GameCompleteScreen.svelte';
 
 	export let levelId: Level;
 	export let initialBoard: Board;
@@ -19,6 +20,7 @@
 	let notes: boolean[][][] = [];
 	let selectedCell = { row: -1, col: -1 };
 	let digitCounts = Array(9).fill(0);
+	let gameComplete = false;
 
 	// State for responsive layout
 	let isWideLayout = false;
@@ -41,6 +43,10 @@
 
 		const unsubDigitCounts = viewModel.digitCounts.subscribe((value) => {
 			digitCounts = value;
+		});
+
+		const unsubGameComplete = viewModel.gameComplete.subscribe((value) => {
+			gameComplete = value;
 		});
 
 		return () => {
@@ -105,7 +111,7 @@
 
 <div class="container" class:wide-layout={isWideLayout}>
 	<div class="header">
-		<button class="back-btn" on:click={goBack}> ← Back </button>
+		<button class="back-btn" on:click={goBack}> Back </button>
 		<h1>{levelId}</h1>
 	</div>
 
@@ -122,6 +128,10 @@
 			<Digits {digitCounts} />
 		</div>
 	</div>
+
+	{#if gameComplete}
+		<GameCompleteScreen {levelId} />
+	{/if}
 </div>
 
 <style>
@@ -165,10 +175,6 @@
 		padding: 8px;
 		position: absolute;
 		left: 0;
-	}
-
-	.back-btn:hover {
-		text-decoration: underline;
 	}
 
 	.tip {
