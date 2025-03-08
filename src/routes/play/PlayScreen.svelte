@@ -61,7 +61,6 @@
 	// Update layout based on window dimensions
 	$: isWideLayout = windowWidth > windowHeight;
 	$: isSquareLayout = windowHeight > 0 && !isWideLayout && windowWidth / windowHeight > 0.65;
-	$: console.log(windowWidth, windowHeight, windowWidth > windowHeight, windowWidth / windowHeight);
 
 	function moveSelection(offsetRow: number, offsetCol: number) {
 		if (selectedCell.row === -1 || selectedCell.col === -1) {
