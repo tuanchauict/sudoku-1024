@@ -30,8 +30,9 @@ export class SudokuViewModel {
     public readonly digitCounts: Readable<number[]>;
     public readonly valueCounts: Readable<number[]>;
     public readonly cellEditable: Readable<boolean>;
+    public readonly violatedCells: Readable<CellPosition[]>;
 
-    constructor(levelId: Level, private initialBoard: Board) {
+    constructor(levelId: Level, public initialBoard: Board) {
         // Initialize the state
         this.state = writable<SudokuState>({
             initialBoard,
@@ -49,6 +50,7 @@ export class SudokuViewModel {
         });
 
         // Create derived stores for each piece of state
+        
         this.board = derived(this.state, ($state) => $state.board);
         this.notes = derived(this.state, ($state) => $state.notes);
         this.selectedCell = derived(this.state, ($state) => $state.selectedCell);
@@ -59,6 +61,7 @@ export class SudokuViewModel {
         this.digitCounts = derived(this.board, ($board) => this.calculateDigitCounts($board));
         this.valueCounts = derived(this.board, ($board) => this.calculateValueCounts($board));
         this.cellEditable = derived(this.selectedCell, ($selectedCell) => this.isEditableCell($selectedCell.row, $selectedCell.col));
+        this.violatedCells = derived(this.board, ($board) => this.findViolatedCells($board));
     }
 
     public selectCell(row: number, col: number): void {
@@ -202,5 +205,58 @@ export class SudokuViewModel {
             return false
         };
         return this.initialBoard[row][col] === 0;
+    }
+
+    private findViolatedCells($board: Board): CellPosition[] {
+        const violations: CellPosition[] = [];
+
+        // Helper to check if a position is already in the violations list
+        const isAlreadyViolated = (row: number, col: number) => {
+            return violations.some(pos => pos.row === row && pos.col === col);
+        };
+
+        // Check each cell
+        for (let row = 0; row < 9; row++) {
+            for (let col = 0; col < 9; col++) {
+                const value = $board[row][col];
+
+                // Skip empty cells
+                if (!value) continue;
+
+                // Skip cells already marked as violations
+                if (isAlreadyViolated(row, col)) continue;
+
+                // Check row
+                for (let c = 0; c < 9; c++) {
+                    if (c !== col && $board[row][c] === value) {
+                        if (!isAlreadyViolated(row, col)) violations.push({ row, col });
+                        if (!isAlreadyViolated(row, c)) violations.push({ row, col: c });
+                    }
+                }
+
+                // Check column
+                for (let r = 0; r < 9; r++) {
+                    if (r !== row && $board[r][col] === value) {
+                        if (!isAlreadyViolated(row, col)) violations.push({ row, col });
+                        if (!isAlreadyViolated(r, col)) violations.push({ row: r, col });
+                    }
+                }
+
+                // Check 3x3 box
+                const boxRow = Math.floor(row / 3) * 3;
+                const boxCol = Math.floor(col / 3) * 3;
+
+                for (let r = boxRow; r < boxRow + 3; r++) {
+                    for (let c = boxCol; c < boxCol + 3; c++) {
+                        if ((r !== row || c !== col) && $board[r][c] === value) {
+                            if (!isAlreadyViolated(row, col)) violations.push({ row, col });
+                            if (!isAlreadyViolated(r, c)) violations.push({ row: r, col: c });
+                        }
+                    }
+                }
+            }
+        }
+        console.log('violations', violations);
+        return violations;
     }
 }

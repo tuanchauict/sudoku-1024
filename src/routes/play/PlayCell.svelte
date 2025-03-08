@@ -1,12 +1,18 @@
 <script lang="ts">
 	import { getSudokuViewModel } from "$lib/sudokuContext";
+	import type { CellPosition } from "$lib/SudokuViewModel";
 
     export let rowIndex: number;
     export let colIndex: number;
     export let cellValue: number;
+    export let isInitial: boolean;
     export let notes: boolean[];
     export let selectedCell: { row: number; col: number };
     export let valueCounts: number[];
+    export let violatedCells: CellPosition[];
+
+    $: isViolated = violatedCells.some(cell => cell.row === rowIndex && cell.col === colIndex);
+
 
     // Get the ViewModel from context
 	const viewModel = getSudokuViewModel();
@@ -32,6 +38,8 @@
     class:same-value={hasSameValue(rowIndex, colIndex) &&
         !(selectedCell.row === rowIndex && selectedCell.col === colIndex)}
     class:complete={cellValue && valueCounts[cellValue] >= 9}
+    class:violated={isViolated}
+    class:initial={isInitial}
     on:click={() => viewModel.selectCell(rowIndex, colIndex)}
 >
     {#if cellValue}
@@ -63,11 +71,11 @@
     }
     
     .same-box {
-		background-color: #ebf1f9;
+		background-color: #eff4fa;
 	}
 
 	.same-line {
-		background-color: #e6f1ff;
+		background-color: #f0f7ff;
 	}
 
 	.same-value {
@@ -84,8 +92,10 @@
 	}
 
 	.cell-value {
-		font-size: 24px;
+		font-size: 28px;
 		font-weight: bold;
+        color: rgb(26, 95, 255);
+        user-select: none;
 	}
 
 	.notes-grid {
@@ -109,4 +119,16 @@
 		font-size: 13.5px;
 		color: #3b82f6;
 	}
+
+    .violated {
+		background-color: #fee2e2;
+	}
+	
+	.violated .cell-value {
+		color: #c70b0b;
+	}
+
+    .initial .cell-value{
+        color: black;
+    }
 </style>

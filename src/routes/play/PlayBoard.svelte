@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import { getSudokuViewModel } from '$lib/sudokuContext';
 	import PlayCell from './PlayCell.svelte';
+	import type { CellPosition } from '$lib/SudokuViewModel';
 
 	export let board: Board = [];
 	export let notes: boolean[][][] = [];
@@ -13,14 +14,21 @@
 
 	// Local state for value counts
 	let valueCounts: number[] = [];
+	let violatedCells: CellPosition[] = [];
 
 	// Subscribe to the valueCounts store once the component is mounted
 	onMount(() => {
-		const unsubscribe = viewModel.valueCounts.subscribe((value) => {
+		const unsubValueCount = viewModel.valueCounts.subscribe((value) => {
 			valueCounts = value;
 		});
+		const unsubViolatedCells = viewModel.violatedCells.subscribe((value) => {
+			violatedCells = value;
+		});
 
-		return unsubscribe;
+		return () => {
+			unsubValueCount();
+			unsubViolatedCells();
+		};
 	});
 </script>
 
@@ -37,9 +45,11 @@
 						{rowIndex}
 						{colIndex}
 						{cellValue}
+						isInitial={viewModel.initialBoard[rowIndex][colIndex] !== 0}
 						notes={notes[rowIndex][colIndex]}
 						{selectedCell}
 						{valueCounts}
+						{violatedCells}
 					/>
 				</div>
 			{/each}
