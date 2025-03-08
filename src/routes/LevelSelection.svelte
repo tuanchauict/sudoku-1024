@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import type { Level } from '$lib/repository';
+	import { generateBoard, type Level } from '$lib/repository';
 
 	const levels = [
 		{
@@ -34,8 +34,8 @@
 	];
 
 	function selectLevel(levelId: Level) {
-		const dummyBoard = '.9.3.6..4.....5.9....2.....3............8...1.2.9.35....35..1..6.......85.81.46..';
-		goto(`/play?level=${levelId}&board=${dummyBoard}`);
+		const board = generateBoard(levelId);
+		goto(`/play?level=${levelId}&board=${board}`);
 	}
 </script>
 

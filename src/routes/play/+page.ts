@@ -10,12 +10,14 @@ export const load: PageLoad = ({ url }) => {
         throw redirect(303, '/');
     }
 
-    const boardStr = url.searchParams.get('board');
+    let boardStr = url.searchParams.get('board');
     const parsedBoard = boardStr ? parseBoard(boardStr) : null;
-    const board = parsedBoard || generateBoard(levelId);
+    if (!parsedBoard) {
+        boardStr = generateBoard(levelId);
 
+        // Redirect to the same page with the generated board
+        throw redirect(303, `play?level=${levelId}&board=${boardStr}`);
+    }
 
-    console.log('levelId', levelId, 'board', board);
-
-    return { levelId, board };
+    return { levelId, board: parsedBoard };
 };

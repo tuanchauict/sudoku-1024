@@ -1,11 +1,58 @@
+import QQWing from 'qqwing';
+
 
 export type Digit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 export type Level = 'Easy' | 'Medium' | 'Hard' | 'Diabolic';
 export type Board = Digit[][];
 
-export function generateBoard(level: Level): Digit[][] {
-    // TODO: Implement the board generation
-    return parseBoard('.9.3.6..4.....5.9....2.....3............8...1.2.9.35....35..1..6.......85.81.46..')!;
+export const qq = new QQWing();
+qq.setPrintStyle(0);
+qq.setRecordHistory(true);
+
+const pool = {
+    Unknown: [] as string[],
+    Easy: [] as string[],
+    Medium: [] as string[],
+    Hard: [] as string[],
+    Diabolic: [] as string[],
+}
+
+const levelMapper = ['Unknown', 'Easy', 'Medium', 'Hard', 'Diabolic'];
+
+export function generateBoard(level: Level): string {
+    console.log(pool);
+    if (pool[level].length > 0) {
+        return pool[level].pop()!;
+    }
+    let count = 0;
+    const levelPool = pool[level];
+
+    while (levelPool.length < 10) {
+        qq.generatePuzzleSymmetry(5);
+        const puzzle = qq.getPuzzleString();
+        qq.solve();
+        const difficulty = qq.getDifficulty();
+        const level = levelMapper[difficulty] as Level;
+        if (pool[level].length < 100) {
+            pool[levelMapper[difficulty] as Level].push(puzzle);
+        }
+        count += 1;
+        if (count > 300) {
+            break;
+        }
+    }
+    console.log(pool);
+    return levelPool.pop()!;
+}
+
+export function prepareDataPool() {
+    while (pool['Easy'].length < 10 || pool['Medium'].length < 10 || pool['Hard'].length < 10 || pool['Diabolic'].length < 10) {
+        qq.generatePuzzleSymmetry(5);
+        const puzzle = qq.getPuzzleString();
+        qq.solve();
+        const difficulty = qq.getDifficulty();
+        pool[levelMapper[difficulty] as Level].push(puzzle);
+    }
 }
 
 export function parseBoard(board: string): Digit[][] | null {
