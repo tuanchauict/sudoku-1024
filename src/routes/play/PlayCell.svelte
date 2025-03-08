@@ -67,7 +67,7 @@
         height: 100%;
         align-items: center;
         justify-content: center;
-        font-size: 24px;
+        font-size: 1.5rem;
     }
     
     .same-box {
@@ -83,7 +83,7 @@
 	}
 
     .selected {
-        outline: 3px solid #f86b00;
+        outline: 3px solid #FF8989;
         outline-offset: -2px;
 	}
 
@@ -92,7 +92,6 @@
 	}
 
 	.cell-value {
-		font-size: 28px;
 		font-weight: bold;
         color: rgb(26, 95, 255);
         user-select: none;

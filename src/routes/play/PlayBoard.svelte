@@ -59,25 +59,21 @@
 
 <style>
 	.sudoku-board {
-		border: 4px solid #000;
+		border: 2px solid #000;
 		display: flex;
 		flex-direction: column;
+		width: 100%;
+		aspect-ratio: 1;
+		box-sizing: border-box;
 	}
 
 	.row {
 		display: flex;
-	}
-
-	.row:last-child .cell {
-		border-bottom: none;
+		flex: 1;
 	}
 
 	.cell {
-		width: 64px;
-		height: 64px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
+		flex: 1;
 		position: relative;
 		border-right: 1px solid #000;
 		border-bottom: 1px solid #000;
@@ -93,10 +89,10 @@
 	}
 
 	.border-bottom-thick {
-		border-bottom: 3px solid #000;
+		border-bottom: 2px solid #000;
 	}
 
 	.border-right-thick {
-		border-right: 3px solid #000;
+		border-right: 2px solid #000;
 	}
 </style>

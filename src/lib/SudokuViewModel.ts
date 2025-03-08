@@ -94,9 +94,7 @@ export class SudokuViewModel {
                 // Toggle the note for this digit
                 newNotes[row][col][digit - 1] = !newNotes[row][col][digit - 1];
             } else {
-                // Clear any notes when setting a value
                 newBoard[row][col] = digit;
-                newNotes[row][col] = Array(9).fill(false);
             }
 
             return {
@@ -120,9 +118,13 @@ export class SudokuViewModel {
             const newBoard = [...state.board.map(row => [...row])];
             const newNotes = [...state.notes.map(row => [...row.map(col => [...col])])];
 
-            // Clear the cell and its notes
-            newBoard[row][col] = 0;
-            newNotes[row][col] = Array(9).fill(false);
+            if (newBoard[row][col] !== 0) {
+                // Clear the cell value if it has a value
+                newBoard[row][col] = 0;
+            } else {
+                // Clear the notes if the cell is already empty
+                newNotes[row][col] = Array(9).fill(false);
+            }
 
             return {
                 ...state,
@@ -256,7 +258,6 @@ export class SudokuViewModel {
                 }
             }
         }
-        console.log('violations', violations);
         return violations;
     }
 }

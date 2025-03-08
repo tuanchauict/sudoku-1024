@@ -19,39 +19,41 @@
 	let board: Board = [];
 	let notes: boolean[][][] = [];
 	let selectedCell = { row: -1, col: -1 };
-	let noteMode = false;
 	let digitCounts = Array(9).fill(0);
-	
+
+	// State for responsive layout
+	let isWideLayout = false;
+	let windowWidth = 0;
+	let windowHeight = 0;
+
 	// Subscribe to stores from the viewModel
 	onMount(() => {
-		const unsubBoard = viewModel.board.subscribe(value => {
+		const unsubBoard = viewModel.board.subscribe((value) => {
 			board = value;
 		});
-		
-		const unsubNotes = viewModel.notes.subscribe(value => {
+
+		const unsubNotes = viewModel.notes.subscribe((value) => {
 			notes = value;
 		});
-		
-		const unsubSelectedCell = viewModel.selectedCell.subscribe(value => {
+
+		const unsubSelectedCell = viewModel.selectedCell.subscribe((value) => {
 			selectedCell = value;
 		});
-		
-		const unsubNoteMode = viewModel.noteMode.subscribe(value => {
-			noteMode = value;
-		});
-		
-		const unsubDigitCounts = viewModel.digitCounts.subscribe(value => {
+
+		const unsubDigitCounts = viewModel.digitCounts.subscribe((value) => {
 			digitCounts = value;
 		});
-		
+
 		return () => {
 			unsubBoard();
 			unsubNotes();
 			unsubSelectedCell();
-			unsubNoteMode();
 			unsubDigitCounts();
 		};
 	});
+
+	// Update layout based on window dimensions
+	$: isWideLayout = windowWidth > windowHeight && windowWidth >= 768;
 
 	function moveSelection(offsetRow: number, offsetCol: number) {
 		if (selectedCell.row === -1 || selectedCell.col === -1) {
@@ -96,9 +98,13 @@
 	}
 </script>
 
-<svelte:window on:keydown={handleKeydown} />
+<svelte:window
+	on:keydown={handleKeydown}
+	bind:innerWidth={windowWidth}
+	bind:innerHeight={windowHeight}
+/>
 
-<div class="container">
+<div class="container" class:wide-layout={isWideLayout}>
 	<div class="header">
 		<button class="back-btn" on:click={goBack}> ← Back </button>
 		<h1>{levelId}</h1>
@@ -108,19 +114,15 @@
 		Tip: Select a cell and press 1-9 to enter values. Use note mode for candidates.
 	</div>
 
-	<PlayBoard 
-		{board} 
-		{notes} 
-		{selectedCell} 
-	/>
+	<div class="game-content" class:wide-layout={isWideLayout}>
+		<div class="board-container">
+			<PlayBoard {board} {notes} {selectedCell} />
+		</div>
 
-	<Digits 
-		{digitCounts}
-	/>
-
-	<Actions 
-		{noteMode}
-	/>
+		<div class="controls-container">
+			<Digits {digitCounts} />
+		</div>
+	</div>
 </div>
 
 <style>
@@ -128,22 +130,28 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		padding: 20px;
+		padding: 12px;
 		font-family: Arial, sans-serif;
-		max-width: 600px;
+		max-width: 100%;
 		margin: 0 auto;
+		width: 100%;
+		box-sizing: border-box;
+	}
+
+	.container.wide-layout {
+		max-width: 900px;
 	}
 
 	.header {
 		display: flex;
 		align-items: center;
 		width: 100%;
-		margin-bottom: 16px;
+		margin-bottom: 12px;
 		position: relative;
 	}
 
 	h1 {
-		font-size: 28px;
+		font-size: 1.5rem;
 		font-weight: bold;
 		flex-grow: 1;
 		text-align: center;
@@ -169,5 +177,65 @@
 		color: #666;
 		margin-bottom: 12px;
 		text-align: center;
+	}
+
+	.game-content {
+		display: flex;
+		flex-direction: row;
+		width: 100%;
+		align-items: center;
+		gap: 16px;
+	}
+
+	.game-content.wide-layout {
+		flex-direction: row;
+		align-items: flex-start;
+	}
+
+	.board-container {
+		width: 100%;
+		max-width: min(100vw - 24px, 90vmin);
+	}
+
+	.wide-layout .board-container {
+		width: 65%;
+		max-width: 65vmin;
+	}
+
+	.controls-container {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		align-items: center;
+	}
+
+	.wide-layout .controls-container {
+		width: 35%;
+		padding-left: 16px;
+	}
+
+	@media (max-width: 600px) {
+		.container {
+			padding: 8px;
+		}
+
+		h1 {
+			font-size: 18px;
+		}
+
+		.back-btn {
+			font-size: 14px;
+			padding: 4px;
+		}
+
+		.tip {
+			font-size: 12px;
+			margin-bottom: 8px;
+		}
+
+		.game-content {
+			flex-direction: column;
+			gap: 8px;
+		}
 	}
 </style>
