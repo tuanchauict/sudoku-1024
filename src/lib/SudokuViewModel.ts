@@ -70,6 +70,23 @@ export class SudokuViewModel {
         this.gameComplete = writable(false);
     }
 
+    public clearBoard(): void {
+        this.state.update((state) => ({
+            ...state,
+            board: state.initialBoard,
+            notes: Array(9)
+                .fill(null)
+                .map(() =>
+                    Array(9)
+                        .fill(null)
+                        .map(() => Array(9).fill(false))
+                ),
+            selectedCell: { row: -1, col: -1 },
+            noteMode: false,
+        }));
+        this.gameComplete.set(false);
+    }
+
     public selectCell(row: number, col: number): void {
         this.state.update((state) => ({
             ...state,

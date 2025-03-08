@@ -1,12 +1,12 @@
 <script lang="ts">
 	import PlayBoard from './PlayBoard.svelte';
 	import Digits from './Digits.svelte';
-	import { goto } from '$app/navigation';
 	import type { Board, Level, Digit } from '$lib/repository';
 	import { SudokuViewModel } from '$lib/SudokuViewModel';
 	import { onMount } from 'svelte';
 	import { setSudokuViewModel } from '$lib/sudokuContext';
 	import GameCompleteScreen from './GameCompleteScreen.svelte';
+	import Header from './Header.svelte';
 
 	export let levelId: Level;
 	export let initialBoard: Board;
@@ -54,6 +54,7 @@
 			unsubNotes();
 			unsubSelectedCell();
 			unsubDigitCounts();
+			unsubGameComplete();
 		};
 	});
 
@@ -79,6 +80,10 @@
 
 	// Handle keyboard input
 	function handleKeydown(event: KeyboardEvent) {
+		if (gameComplete) {
+			return;
+		}
+
 		// Only proceed if key is a number from 1-9
 		if (event.key.match(/[1-9]/)) {
 			const digit = parseInt(event.key, 10) as Digit;
@@ -97,10 +102,6 @@
 			moveSelection(0, 1);
 		}
 	}
-
-	function goBack() {
-		goto('/');
-	}
 </script>
 
 <svelte:window
@@ -110,14 +111,7 @@
 />
 
 <div class="container" class:wide-layout={isWideLayout}>
-	<div class="header">
-		<button class="back-btn" on:click={goBack}> Back </button>
-		<h1>{levelId}</h1>
-	</div>
-
-	<div class="tip">
-		Tip: Select a cell and press 1-9 to enter values. Use note mode for candidates.
-	</div>
+	<Header {levelId} />
 
 	<div class="game-content" class:wide-layout={isWideLayout}>
 		<div class="board-container">
@@ -149,39 +143,6 @@
 
 	.container.wide-layout {
 		max-width: 900px;
-	}
-
-	.header {
-		display: flex;
-		align-items: center;
-		width: 100%;
-		margin-bottom: 12px;
-		position: relative;
-	}
-
-	h1 {
-		font-size: 1.5rem;
-		font-weight: bold;
-		flex-grow: 1;
-		text-align: center;
-	}
-
-	.back-btn {
-		background-color: transparent;
-		border: none;
-		font-size: 16px;
-		color: #3b82f6;
-		cursor: pointer;
-		padding: 8px;
-		position: absolute;
-		left: 0;
-	}
-
-	.tip {
-		font-size: 14px;
-		color: #666;
-		margin-bottom: 12px;
-		text-align: center;
 	}
 
 	.game-content {
@@ -222,20 +183,6 @@
 	@media (max-width: 600px) {
 		.container {
 			padding: 8px;
-		}
-
-		h1 {
-			font-size: 18px;
-		}
-
-		.back-btn {
-			font-size: 14px;
-			padding: 4px;
-		}
-
-		.tip {
-			font-size: 12px;
-			margin-bottom: 8px;
 		}
 
 		.game-content {
