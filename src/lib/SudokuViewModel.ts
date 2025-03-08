@@ -61,7 +61,6 @@ export class SudokuViewModel {
         this.cellEditable = derived(this.selectedCell, ($selectedCell) => this.isEditableCell($selectedCell.row, $selectedCell.col));
     }
 
-    // Select a cell
     public selectCell(row: number, col: number): void {
         this.state.update((state) => ({
             ...state,
@@ -69,7 +68,6 @@ export class SudokuViewModel {
         }));
     }
 
-    // Toggle note mode
     public toggleNoteMode(): void {
         this.state.update((state) => ({
             ...state,
