@@ -69,11 +69,10 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		justify-content: center;
-		padding: 24px;
 		font-family: Arial, sans-serif;
-		height: 100%;
-		width: 100%;
+		height: 100vh;
+		width: 100vw;
+		margin-top: 24px;
 		background-color: #f8fafc;
 	}
 

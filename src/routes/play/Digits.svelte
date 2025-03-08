@@ -96,7 +96,8 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: 1.6rem;
+		font-size: 1.4rem;
+		color: black;
 		font-weight: bold;
 		background-color: #f0f0f0;
 		border: 1px solid #ccc;
@@ -128,6 +129,7 @@
 
 	.clear-btn {
 		color: #4b5563;
+		font-size: 1.4rem;
 	}
 
 	.digit-button.clear-btn:hover {

@@ -83,8 +83,7 @@
 	}
 
     .selected {
-        outline: 3.5px solid #21cb65;
-        outline-offset: -1.5px;
+        outline: 3.5px solid #21cb65BB;
         position: relative;
         z-index: 1;
 	}
@@ -117,7 +116,7 @@
 	}
 
 	.note-value {
-		font-size: 0.7rem;
+		font-size: 0.65rem;
 		color: #3b82f6;
 	}
 

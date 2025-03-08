@@ -20,7 +20,6 @@ const pool = {
 const levelMapper = ['Unknown', 'Easy', 'Medium', 'Hard', 'Diabolic'];
 
 export function generateBoard(level: Level): string {
-    console.log(pool);
     if (pool[level].length > 0) {
         return pool[level].pop()!;
     }
@@ -41,12 +40,11 @@ export function generateBoard(level: Level): string {
             break;
         }
     }
-    console.log(pool);
     return levelPool.pop()!;
 }
 
 export function prepareDataPool() {
-    while (pool['Easy'].length < 10 || pool['Medium'].length < 10 || pool['Hard'].length < 10 || pool['Diabolic'].length < 10) {
+    while (pool.Easy.length < 10 || pool.Medium.length < 10 || pool.Hard.length < 10 || pool.Diabolic.length < 10) {
         qq.generatePuzzleSymmetry(5);
         const puzzle = qq.getPuzzleString();
         qq.solve();
