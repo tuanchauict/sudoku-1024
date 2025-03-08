@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { generateBoard, type Level } from '$lib/repository';
+	import { base } from '$app/paths';
 	
 	export let levelId: Level;
 	
 	function startNewGame() {
-        goto(`/`);
+        goto(`${base}/`);
 	}
 </script>
 

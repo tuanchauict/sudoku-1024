@@ -2,6 +2,7 @@
     import { goto } from '$app/navigation';
 	import { getSudokuViewModel } from '$lib/sudokuContext';
 	import { onMount } from 'svelte';
+    import { base } from '$app/paths';
 
     export let levelId: string;
 
@@ -10,7 +11,7 @@
     const viewModel = getSudokuViewModel();
 
     function goBack() {
-        goto(`/`);
+        goto(`${base}/`);
     }
 
     function clearBoard() {
