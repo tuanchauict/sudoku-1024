@@ -72,7 +72,7 @@
 		font-family: Arial, sans-serif;
 		height: 100vh;
 		width: 100vw;
-		margin-top: 24px;
+		padding-top: 24px;
 		background-color: #f8fafc;
 	}
 
