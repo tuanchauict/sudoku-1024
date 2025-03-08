@@ -1,29 +1,15 @@
 <script lang="ts">
 	import type { Digit } from '$lib/repository';
+	import { getSudokuViewModel } from '$lib/sudokuContext';
 
-	export let board = [];
-    export let onDigit: (digit: Digit) => void;
+	export let digitCounts: number[] = Array(9).fill(0);
+
+	// Get the ViewModel from context
+	const viewModel = getSudokuViewModel();
 
 	function handleDigitClick(digit: number) {
-        onDigit(digit as Digit);
+		viewModel.enterDigit(digit as Digit);
 	}
-
-	// Count how many times each digit appears in the board
-	function getDigitCounts() {
-		const counts = Array(9).fill(0);
-
-		for (let row = 0; row < 9; row++) {
-			for (let col = 0; col < 9; col++) {
-				if (board[row][col] > 0) {
-					counts[board[row][col] - 1]++;
-				}
-			}
-		}
-
-		return counts;
-	}
-
-	$: digitCounts = getDigitCounts();
 </script>
 
 <div class="digits-container">

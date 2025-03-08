@@ -1,14 +1,28 @@
 <script lang="ts">
+	import { getSudokuViewModel } from '$lib/sudokuContext';
+	import { onMount } from 'svelte';
+	
 	export let noteMode = false;
-	export let onToggleNoteMode: () => void;
-	export let onClearCell: () => void;
+
+	let isClearable = true;
+	
+	// Get the ViewModel from context
+	const viewModel = getSudokuViewModel();
+
+	onMount(() => {
+		const ubsubEditableCell = viewModel.cellEditable.subscribe(value => {
+			isClearable = value;
+		});
+
+		return ubsubEditableCell;
+	});
 
 	function toggleNoteMode() {
-		onToggleNoteMode();
+		viewModel.toggleNoteMode();
 	}
 
 	function clearCell() {
-		onClearCell();
+		viewModel.clearSelectedCell();
 	}
 </script>
 
@@ -31,7 +45,10 @@
 		<span>Notes</span>
 	</button>
 
-	<button class="action-btn clear-btn" on:click={clearCell}>
+	<button 
+		class="action-btn clear-btn"
+		disabled={!isClearable}
+		on:click={clearCell}>
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			width="24"
@@ -101,5 +118,10 @@
 
 	.clear-btn:active {
 		background-color: #fecaca;
+	}
+
+	.clear-btn:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
 	}
 </style>

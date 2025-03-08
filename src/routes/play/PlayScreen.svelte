@@ -3,80 +3,63 @@
 	import Digits from './Digits.svelte';
 	import Actions from './Actions.svelte';
 	import { goto } from '$app/navigation';
-	import type { Board, Digit, Level } from '$lib/repository';
-
+	import type { Board, Level, Digit } from '$lib/repository';
+	import { SudokuViewModel } from '$lib/SudokuViewModel';
+	import { onMount } from 'svelte';
+	import { setSudokuViewModel } from '$lib/sudokuContext';
 
 	export let levelId: Level;
 	export let initialBoard: Board;
 
-	// Initialize the board and notes
-	let board = initialBoard;
-	let notes = Array(9)
-		.fill(null)
-		.map(() =>
-			Array(9)
-				.fill(null)
-				.map(() => Array(9).fill(false))
-		);
+	// Create the view model and set it in context
+	const viewModel = new SudokuViewModel(levelId, initialBoard);
+	setSudokuViewModel(viewModel);
 
-	// Track which cell is currently selected
+	// Create reactive variables from stores
+	let board: Board = [];
+	let notes: boolean[][][] = [];
 	let selectedCell = { row: -1, col: -1 };
-
-	// Track whether we're in "note mode"
 	let noteMode = false;
-
-	// Handle cell selection
-	function handleCellSelect(row: number, col: number) {
-		selectedCell = { row, col };
-	}
-
-	// Handle number input
-	function handleNumberInput(digit: Digit) {
-		const { row, col } = selectedCell;
-
-		if (row === -1 || col === -1) return;
-
-		if (noteMode) {
-			// Toggle the note for this digit
-			notes[row][col][digit - 1] = !notes[row][col][digit - 1];
-		} else {
-			// Clear any notes when setting a value
-			board[row][col] = digit;
-			notes[row][col] = Array(9).fill(false);
-		}
-
-		// Force reactivity
-		board = [...board];
-		notes = [...notes];
-	}
-
-	// Toggle note mode
-	function handleToggleNoteMode() {
-		noteMode = !noteMode;
-	}
-
-	// Clear the selected cell
-	function handleClearCell() {
-		const { row, col } = selectedCell;
-		if (row === -1 || col === -1) return;
-
-		board[row][col] = 0;
-		notes[row][col] = Array(9).fill(false);
-
-		// Force reactivity
-		board = [...board];
-		notes = [...notes];
-	}
+	let digitCounts = Array(9).fill(0);
+	
+	// Subscribe to stores from the viewModel
+	onMount(() => {
+		const unsubBoard = viewModel.board.subscribe(value => {
+			board = value;
+		});
+		
+		const unsubNotes = viewModel.notes.subscribe(value => {
+			notes = value;
+		});
+		
+		const unsubSelectedCell = viewModel.selectedCell.subscribe(value => {
+			selectedCell = value;
+		});
+		
+		const unsubNoteMode = viewModel.noteMode.subscribe(value => {
+			noteMode = value;
+		});
+		
+		const unsubDigitCounts = viewModel.digitCounts.subscribe(value => {
+			digitCounts = value;
+		});
+		
+		return () => {
+			unsubBoard();
+			unsubNotes();
+			unsubSelectedCell();
+			unsubNoteMode();
+			unsubDigitCounts();
+		};
+	});
 
 	// Handle keyboard input
 	function handleKeydown(event: KeyboardEvent) {
-		const { row, col } = selectedCell;
+		// Only proceed if key is a number from 1-9
+		if (!event.key.match(/[1-9]/)) return;
 
-		// Only proceed if a cell is selected and key is a number from 1-9
-		if (row === -1 || col === -1 || !event.key.match(/[1-9]/)) return;
-
-		const digit: Digit = parseInt(event.key, 10) as Digit;
-		handleNumberInput(digit);
+		const digit = parseInt(event.key, 10) as Digit;
+		viewModel.enterDigit(digit);
 	}
 
 	function goBack() {
@@ -96,11 +79,19 @@
 		Tip: Select a cell and press 1-9 to enter values. Use note mode for candidates.
 	</div>
 
-	<PlayBoard {board} {notes} {selectedCell} onCellSelect={handleCellSelect} />
+	<PlayBoard 
+		{board} 
+		{notes} 
+		{selectedCell} 
+	/>
 
-	<Digits {board} onDigit={handleNumberInput} />
+	<Digits 
+		{digitCounts}
+	/>
 
-	<Actions {noteMode} onToggleNoteMode={handleToggleNoteMode} onClearCell={handleClearCell} />
+	<Actions 
+		{noteMode}
+	/>
 </div>
 
 <style>
