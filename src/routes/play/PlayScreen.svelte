@@ -59,7 +59,9 @@
 	});
 
 	// Update layout based on window dimensions
-	$: isWideLayout = windowWidth > windowHeight && windowWidth >= 768;
+	$: isWideLayout = windowWidth > windowHeight;
+	$: isSquareLayout = windowHeight > 0 && !isWideLayout && windowWidth / windowHeight > 0.65;
+	$: console.log(windowWidth, windowHeight, windowWidth > windowHeight, windowWidth / windowHeight);
 
 	function moveSelection(offsetRow: number, offsetCol: number) {
 		if (selectedCell.row === -1 || selectedCell.col === -1) {
@@ -114,7 +116,7 @@
 	<Header {levelId} />
 
 	<div class="game-content" class:wide-layout={isWideLayout}>
-		<div class="board-container">
+		<div class="board-container" class:square-layout={isSquareLayout}>
 			<PlayBoard {board} {notes} {selectedCell} />
 		</div>
 
@@ -139,33 +141,35 @@
 		margin: 0 auto;
 		width: 100%;
 		box-sizing: border-box;
-	}
 
-	.container.wide-layout {
-		max-width: 900px;
+		&.wide-layout {
+			max-width: 900px;
+		}
 	}
 
 	.game-content {
 		display: flex;
-		flex-direction: row;
+		flex-direction: column;
 		width: 100%;
 		align-items: center;
 		gap: 16px;
-	}
 
-	.game-content.wide-layout {
-		flex-direction: row;
-		align-items: flex-start;
+		&.wide-layout {
+			flex-direction: row;
+		}
 	}
 
 	.board-container {
 		width: 100%;
-		max-width: min(100vw - 24px, 90vmin);
+
+		&.square-layout {
+			max-width: min(100vh - 330px, 80vmin);
+		}
 	}
 
 	.wide-layout .board-container {
 		width: 65%;
-		max-width: 65vmin;
+		max-width: 75vmin;
 	}
 
 	.controls-container {

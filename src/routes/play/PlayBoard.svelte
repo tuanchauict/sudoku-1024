@@ -78,6 +78,7 @@
 		border-right: 1px solid #000;
 		border-bottom: 1px solid #000;
 		cursor: pointer;
+		overflow: visible;
 	}
 
 	.cell:nth-child(9n) {

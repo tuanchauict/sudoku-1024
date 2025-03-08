@@ -83,8 +83,10 @@
 	}
 
     .selected {
-        outline: 3px solid #FF8989;
-        outline-offset: -2px;
+        outline: 3.5px solid #21cb65;
+        outline-offset: -1.5px;
+        position: relative;
+        z-index: 1;
 	}
 
 	.complete {
@@ -115,16 +117,16 @@
 	}
 
 	.note-value {
-		font-size: 13.5px;
+		font-size: 0.7rem;
 		color: #3b82f6;
 	}
 
     .violated {
-		background-color: #fee2e2;
+		background-color: #fcd3d3;
 	}
 	
 	.violated .cell-value {
-		color: #c70b0b;
+		color: #ca0000;
 	}
 
     .initial .cell-value{

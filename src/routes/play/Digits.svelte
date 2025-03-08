@@ -3,7 +3,7 @@
 	import { getSudokuViewModel } from '$lib/sudokuContext';
 	import { onMount } from 'svelte';
 	import NoteIcon from './NoteIcon.svelte';
-	import ClearIcon from './ClearIcon.svelte';
+	import Tip from './Tip.svelte';
 
 	export let digitCounts: number[] = Array(9).fill(0);
 
@@ -52,12 +52,11 @@
 		{/each}
 
 		<button
-			tabindex="-1"
 			class="digit-button clear-btn"
 			disabled={!isClearable}
 			on:click={() => viewModel.clearSelectedCell()}
 		>
-			<ClearIcon />
+			<span>&#10005;</span>
 		</button>
 	</div>
 
@@ -68,6 +67,8 @@
 			<span>Note</span>
 		</button>
 	</div>
+
+	<Tip />
 </div>
 
 <style>
@@ -147,7 +148,7 @@
 		display: flex;
 		justify-content: center;
 		gap: 16px;
-		margin: 16px 4px;
+		margin: 8px 4px;
 		width: 100%;
 	}
 
