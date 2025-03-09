@@ -1,38 +1,42 @@
-# sv
+<center>
+    <img src="https://github.com/tuanchauict/sudoku-1024/blob/main/static/logo.png?raw=true" width="150"/>
+</center>
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+## Sudoku 1024
+Sudoku 1024 is a modern take on the classic Sudoku puzzle game designed to keep players engaged with fresh challenges. Built with Svelte for a responsive and interactive user experience.
 
-## Creating a project
+Enjoy the game at [Sudoku 1024](https://tuanchauict.github.io/sudoku-1024/)
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Description
+Play classic Sudoku without getting bored! Sudoku 1024 offers a twist on the traditional game with enhanced features and endless puzzles to keep your mind sharp.
 
-```bash
-# create a new project in the current directory
-npx sv create
+Four levels of difficulty are available to suit players of all skill levels. Choose from Easy, Medium, Hard, or Diabolic to challenge yourself and improve your Sudoku skills.
 
-# create a new project in my-app
-npx sv create my-app
-```
+Easy to share with your friends. Simply copy the URL and send it to your friends to see who can solve the puzzle the fastest.
 
-## Developing
+## Technologies
+- **Frontend Framework**: Svelte
+- **Package Manager**: pnpm
+- **Build Tool**: Vite (recommended with Svelte)
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
+## Installation
 
 ```bash
-npm run build
+# Clone the repository
+git https://github.com/tuanchauict/sudoku-1024/
+
+# Navigate to project directory
+cd sudoku-1024
+
+# Install dependencies
+pnpm install
+
+# Start development server
+pnpm run dev
 ```
 
-You can preview the production build with `npm run preview`.
+## Contributing
+Contributions are welcome! Please feel free to submit a Pull Request or open an Issue if you encounter any problems.
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+## License
+This project is licensed under the MIT License - see the LICENSE file for details.
