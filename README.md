@@ -1,6 +1,6 @@
-<center>
+<p style="text-align: center">
     <img src="https://github.com/tuanchauict/sudoku-1024/blob/main/static/logo.png?raw=true" width="150"/>
-</center>
+</p>
 
 ## Sudoku 1024
 Sudoku 1024 is a modern take on the classic Sudoku puzzle game designed to keep players engaged with fresh challenges. Built with Svelte for a responsive and interactive user experience.
