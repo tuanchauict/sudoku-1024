@@ -123,7 +123,7 @@ export class SudokuViewModel {
     }
 
     public toggleNoteMode(): void {
-        this.noteMode.set(!this.noteMode);
+        this.noteMode.set(!this.isInNodeMode);
     }
 
     // Handle number input
