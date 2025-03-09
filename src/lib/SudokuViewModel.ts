@@ -46,7 +46,7 @@ export class SudokuViewModel {
         this.violatedCells = derived(this.board, ($board) => this.findViolatedCells($board));
 
         // Game completion
-        this.gameComplete = writable(true);
+        this.gameComplete = writable(false);
     }
 
     private static createState(initialBoard: Board): SudokuState {
