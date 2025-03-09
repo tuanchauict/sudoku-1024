@@ -3,6 +3,8 @@
 	import { base } from '$app/paths';
 	import { generator, type Level } from '$lib/Generator';
 
+	const logo = `${base}/logo.png`;
+
 	const levels = [
 		{
 			id: 'Easy' as Level,
@@ -27,7 +29,7 @@
 		},
 		{
 			id: 'Diabolic' as Level,
-			name: 'Diaoblic',
+			name: 'Diabolic',
 			color: '#ef4444',
 			gradient: 'linear-gradient(135deg, #ef4444, #dc2626)',
 			icon: '⭐⭐⭐⭐'
@@ -42,7 +44,9 @@
 
 <div class="container">
 	<h1>SUDOKU</h1>
-	<div class="logo">9</div>
+	<div class="logo">
+		<img src="{logo}" alt="Sudoku Logo"  style="width: 118%; height: 118%" />
+	</div>
 
 	<div class="levels-container">
 		<h2>Select Level</h2>
@@ -95,9 +99,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 16px;
+        border-radius: 12px;
         margin-bottom: 36px;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+        box-shadow: 0 5px 15px -3px rgba(0, 0, 0, 0.4),
         0 4px 6px -2px rgba(0, 0, 0, 0.05);
         text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
         position: relative;
@@ -134,6 +138,7 @@
     h2 {
         font-size: 20px;
         margin-bottom: 20px;
+				margin-top: 0;
         color: #475569;
         text-align: center;
         font-weight: 600;
