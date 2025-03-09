@@ -49,11 +49,13 @@
 			<!-- Notes grid -->
 			<div class="notes-grid">
 				{#each Array(9).fill(null) as _, noteIndex}
-					<div class="note-cell">
-						{#if notes[noteIndex]}
+					{#if notes[noteIndex]}
+						<div class="note-cell">
+
 							<span class="note-value">{noteIndex + 1}</span>
-						{/if}
-					</div>
+
+						</div>
+					{/if}
 				{/each}
 			</div>
 		{/if}
@@ -68,7 +70,7 @@
         align-items: center;
         justify-content: center;
         font-size: 1.5rem;
-      	user-select: none;
+        user-select: none;
     }
 
     .same-box {
@@ -98,6 +100,7 @@
         font-weight: bold;
         color: rgb(26, 95, 255);
         user-select: none;
+				font-family: monospace;
     }
 
     .notes-grid {
@@ -106,20 +109,24 @@
         left: 0;
         width: 100%;
         height: 100%;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: repeat(3, 1fr);
+        display: flex;
+        align-content: center;
+        justify-content: center;
+        flex-wrap: wrap;
     }
 
     .note-cell {
         display: flex;
         align-items: center;
         justify-content: center;
+        width: 30%;
+        height: 30%;
     }
 
     .note-value {
-        font-size: 0.65rem;
+        font-size: 0.8rem;
         color: #3b82f6;
+        font-family: monospace;
     }
 
     .violated {
