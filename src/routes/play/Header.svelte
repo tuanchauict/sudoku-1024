@@ -7,7 +7,7 @@
 	export let levelId: string;
 
 	const viewModel = getSudokuViewModel();
-	
+
 	let timePass = viewModel.timePass;
 
 	
@@ -34,12 +34,12 @@
 </script>
 
 <div class="header">
-	<button class="back-btn" on:click={goBack}> Back </button>
+	<button class="back-btn" on:click={goBack}>Back</button>
 	<div class="title">
 		<h1>{levelId}</h1>
 		<h2>{readableTime}</h2>
 	</div>
-	<button class="clear-btn" on:click={clearBoard}> Clear </button>
+	<button class="clear-btn" on:click={clearBoard}>Reset</button>
 </div>
 
 
