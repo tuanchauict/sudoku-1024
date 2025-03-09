@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 	import { getSudokuViewModel } from '$lib/sudokuContext';
 	import PlayCell from './PlayCell.svelte';
-	import type { CellPosition } from '$lib/SudokuViewModel';
+	import type { CellPosition } from '$lib/models';
 
 	export let board: Board = [];
 	export let notes: boolean[][][] = [];
