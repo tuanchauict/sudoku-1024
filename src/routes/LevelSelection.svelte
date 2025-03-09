@@ -73,11 +73,11 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        font-family: Arial, sans-serif;
         height: 100vh;
         width: 100vw;
         padding-top: 24px;
         background-color: #f8fafc;
+				font-family: monospace;
     }
 
     h1 {
@@ -186,10 +186,11 @@
     }
 
     .level-name {
-        font-size: 22px;
+        font-size: 1.8rem;
         color: white;
         font-weight: bold;
         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        font-family: monospace;
     }
 
     .level-icons {

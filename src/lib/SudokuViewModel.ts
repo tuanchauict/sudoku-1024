@@ -1,7 +1,8 @@
 import { writable, derived, type Writable, type Readable } from 'svelte/store';
-import type { Board, Digit, Level } from '$lib/parser';
+import type { Board, Digit } from '$lib/parser';
 import type { CellPosition, SudokuState } from './models';
 import { GameStorage } from './storage';
+import type { Level } from '$lib/Generator';
 
 export class SudokuViewModel {
     // Private stores
@@ -45,7 +46,7 @@ export class SudokuViewModel {
         this.violatedCells = derived(this.board, ($board) => this.findViolatedCells($board));
 
         // Game completion
-        this.gameComplete = writable(false);
+        this.gameComplete = writable(true);
     }
 
     private static createState(initialBoard: Board): SudokuState {
@@ -60,15 +61,6 @@ export class SudokuViewModel {
                 ),
             selectedCell: { row: -1, col: -1 },
         };
-    }
-
-    private get currentGameState(): SudokuState {
-        let value: SudokuState;
-        const unsubscribe = this.state.subscribe(value => {
-            value = value;
-        });
-        unsubscribe();
-        return value!;
     }
 
     private get isInNodeMode(): boolean {
@@ -217,7 +209,7 @@ export class SudokuViewModel {
 
     // Helper methods for checking cell relationships
     public isSameBox(row: number, col: number): boolean {
-        let currentSelectedCell = this.currentSelectedCell;
+        const currentSelectedCell = this.currentSelectedCell;
 
         if (!currentSelectedCell || currentSelectedCell.row === -1 || currentSelectedCell.col === -1) {
             return false;
@@ -232,8 +224,8 @@ export class SudokuViewModel {
     }
 
     public hasSameValue(row: number, col: number): boolean {
-        let selectedCell = this.currentSelectedCell;
-        let currentBoard = this.currentBoard;
+        const selectedCell = this.currentSelectedCell;
+        const currentBoard = this.currentBoard;
 
         if (!selectedCell || !currentBoard ||
             selectedCell.row === -1 || selectedCell.col === -1) {
@@ -304,7 +296,7 @@ export class SudokuViewModel {
     }
 
     private updateCompleteState() {
-        let currentBoard = this.currentBoard;
+        const currentBoard = this.currentBoard;
 
         const isFill = currentBoard.every(row => row.every(cell => cell > 0));
         if (!isFill) {

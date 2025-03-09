@@ -10,8 +10,6 @@
 
 	let timePass = viewModel.timePass;
 
-	
-
 	function goBack() {
 		goto(`${base}/`);
 	}
@@ -42,49 +40,46 @@
 	<button class="clear-btn" on:click={clearBoard}>Reset</button>
 </div>
 
-
-
 <style>
-	.header {
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		width: 100%;
-		margin-bottom: 12px;
-		position: relative;
-	}
+    .header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 12px;
+        position: relative;
+    }
 
-	.title {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		flex-direction: column;
-		flex-grow: 1;
-	}
+    .title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        flex-grow: 1;
+    }
 
-	h1 {
-		font-size: 1.2rem;
-		font-weight: bold;
-		text-align: center;
-		margin: 10px 0 0;
-	}
+    h1 {
+        font-size: 1.2rem;
+        font-weight: bold;
+        text-align: center;
+        margin: 10px 0 0;
+    }
 
-	h2 {
-		font-size: 0.8rem;
-		font-weight: normal;
-		color: #888;
-		margin: 2px 0 0;
-	}
+    h2 {
+        font-size: 0.8rem;
+        font-weight: normal;
+        color: #888;
+        margin: 2px 0 0;
+    }
 
-	.back-btn,
-	.clear-btn {
-		background-color: transparent;
-		border: none;
-		font-size: 16px;
-		color: #3b82f6;
-		cursor: pointer;
-		padding: 8px;
-		left: 0;
-	}
-
+    .back-btn,
+    .clear-btn {
+        background-color: transparent;
+        border: none;
+        font-size: 16px;
+        color: #3b82f6;
+        cursor: pointer;
+        padding: 8px;
+        left: 0;
+    }
 </style>
