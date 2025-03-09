@@ -1,19 +1,7 @@
 import { writable, derived, type Writable, type Readable } from 'svelte/store';
 import type { Board, Digit, Level } from '$lib/repository';
-
-export interface CellPosition {
-    row: number;
-    col: number;
-}
-
-export interface SudokuState {
-    initialBoard: Board;
-    board: Board;
-    notes: boolean[][][];
-    selectedCell: CellPosition;
-    noteMode: boolean;
-    levelId: Level;
-}
+import type { CellPosition, SudokuState } from './models';
+import { GameStorage } from './storage';
 
 export class SudokuViewModel {
     // Private stores
@@ -23,8 +11,7 @@ export class SudokuViewModel {
     public readonly board: Readable<Board>;
     public readonly notes: Readable<boolean[][][]>;
     public readonly selectedCell: Readable<CellPosition>;
-    public readonly noteMode: Readable<boolean>;
-    public readonly levelId: Readable<Level>;
+    public readonly noteMode: Writable<boolean> = writable(false);
 
     // Computed values
     public readonly digitCounts: Readable<number[]>;
@@ -35,30 +22,21 @@ export class SudokuViewModel {
     // Public stores for game completion
     public gameComplete: Writable<boolean>;
 
-    constructor(levelId: Level, public initialBoard: Board) {
+    public timePass: number;
+    private timeStart: number = Date.now();
+
+    constructor(public levelId: Level, public initialBoard: Board) {
+        const savedGame = GameStorage.loadCurrentGame(initialBoard);
+        const state = savedGame ? savedGame.state : SudokuViewModel.createState(initialBoard);
+        this.timePass = savedGame ? savedGame.timePass : 0;
         // Initialize the state
-        this.state = writable<SudokuState>({
-            initialBoard,
-            board: initialBoard,
-            notes: Array(9)
-                .fill(null)
-                .map(() =>
-                    Array(9)
-                        .fill(null)
-                        .map(() => Array(9).fill(false))
-                ),
-            selectedCell: { row: -1, col: -1 },
-            noteMode: false,
-            levelId,
-        });
+        this.state = writable<SudokuState>(state);
 
         // Create derived stores for each piece of state
 
         this.board = derived(this.state, ($state) => $state.board);
         this.notes = derived(this.state, ($state) => $state.notes);
         this.selectedCell = derived(this.state, ($state) => $state.selectedCell);
-        this.noteMode = derived(this.state, ($state) => $state.noteMode);
-        this.levelId = derived(this.state, ($state) => $state.levelId);
 
         // Computed values
         this.digitCounts = derived(this.board, ($board) => this.calculateDigitCounts($board));
@@ -70,10 +48,60 @@ export class SudokuViewModel {
         this.gameComplete = writable(false);
     }
 
+    private static createState(initialBoard: Board): SudokuState {
+        return {
+            board: initialBoard,
+            notes: Array(9)
+                .fill(null)
+                .map(() =>
+                    Array(9)
+                        .fill(null)
+                        .map(() => Array(9).fill(false))
+                ),
+            selectedCell: { row: -1, col: -1 },
+        };
+    }
+
+    private get currentGameState(): SudokuState {
+        let value: SudokuState;
+        const unsubscribe = this.state.subscribe(value => {
+            value = value;
+        });
+        unsubscribe();
+        return value!;
+    }
+
+    private get isInNodeMode(): boolean {
+        let currentNoteMode: boolean = false;
+        const unsubscribe = this.noteMode.subscribe(value => {
+            currentNoteMode = value;
+        });
+        unsubscribe();
+        return currentNoteMode;
+    }
+
+    private get currentSelectedCell(): CellPosition {
+        let currentSelectedCell: CellPosition = { row: -1, col: -1 };
+        const unsubscribe = this.selectedCell.subscribe(value => {
+            currentSelectedCell = value;
+        });
+        unsubscribe();
+        return currentSelectedCell;
+    }
+
+    private get currentBoard(): Board {
+        let currentBoard: Board = this.initialBoard;
+        const unsubscribe = this.board.subscribe(value => {
+            currentBoard = value;
+        });
+        unsubscribe();
+        return currentBoard;
+    }
+
     public clearBoard(): void {
-        this.state.update((state) => ({
+        this.updateState((state) => ({
             ...state,
-            board: state.initialBoard,
+            board: this.initialBoard,
             notes: Array(9)
                 .fill(null)
                 .map(() =>
@@ -88,22 +116,19 @@ export class SudokuViewModel {
     }
 
     public selectCell(row: number, col: number): void {
-        this.state.update((state) => ({
+        this.updateState((state) => ({
             ...state,
             selectedCell: { row, col }
         }));
     }
 
     public toggleNoteMode(): void {
-        this.state.update((state) => ({
-            ...state,
-            noteMode: !state.noteMode
-        }));
+        this.noteMode.set(!this.noteMode);
     }
 
     // Handle number input
     public enterDigit(digit: Digit): void {
-        this.state.update((state) => {
+        this.updateState((state) => {
             const { row, col } = state.selectedCell;
             if (!this.isEditableCell(row, col)) {
                 return state;
@@ -113,7 +138,7 @@ export class SudokuViewModel {
             const newBoard = [...state.board.map(row => [...row])];
             const newNotes = [...state.notes.map(row => [...row.map(col => [...col])])];
 
-            if (state.noteMode) {
+            if (this.isInNodeMode) {
                 // Toggle the note for this digit
                 newNotes[row][col][digit - 1] = !newNotes[row][col][digit - 1];
             } else {
@@ -133,7 +158,7 @@ export class SudokuViewModel {
 
     // Clear the selected cell
     public clearSelectedCell(): void {
-        this.state.update((state) => {
+        this.updateState((state) => {
             const { row, col } = state.selectedCell;
 
             if (!this.isEditableCell(row, col)) {
@@ -192,13 +217,11 @@ export class SudokuViewModel {
 
     // Helper methods for checking cell relationships
     public isSameBox(row: number, col: number): boolean {
-        let currentSelectedCell: CellPosition | undefined;
-        const unsubscribe = this.selectedCell.subscribe(value => {
-            currentSelectedCell = value;
-        });
-        unsubscribe();
+        let currentSelectedCell = this.currentSelectedCell;
 
-        if (!currentSelectedCell || currentSelectedCell.row === -1 || currentSelectedCell.col === -1) return false;
+        if (!currentSelectedCell || currentSelectedCell.row === -1 || currentSelectedCell.col === -1) {
+            return false;
+        }
 
         const boxRow = Math.floor(row / 3);
         const boxCol = Math.floor(col / 3);
@@ -209,23 +232,15 @@ export class SudokuViewModel {
     }
 
     public hasSameValue(row: number, col: number): boolean {
-        let currentSelectedCell: CellPosition | undefined;
-        let currentBoard: Board | undefined;
+        let selectedCell = this.currentSelectedCell;
+        let currentBoard = this.currentBoard;
 
-        const unsubscribe1 = this.selectedCell.subscribe(value => {
-            currentSelectedCell = value;
-        });
-        unsubscribe1();
+        if (!selectedCell || !currentBoard ||
+            selectedCell.row === -1 || selectedCell.col === -1) {
+            return false;
+        }
 
-        const unsubscribe2 = this.board.subscribe(value => {
-            currentBoard = value;
-        });
-        unsubscribe2();
-
-        if (!currentSelectedCell || !currentBoard ||
-            currentSelectedCell.row === -1 || currentSelectedCell.col === -1) return false;
-
-        const selectedValue = currentBoard[currentSelectedCell.row][currentSelectedCell.col];
+        const selectedValue = currentBoard[selectedCell.row][selectedCell.col];
         return Boolean(selectedValue && currentBoard[row][col] === selectedValue);
     }
 
@@ -289,15 +304,7 @@ export class SudokuViewModel {
     }
 
     private updateCompleteState() {
-        let currentBoard: Board | undefined;
-        const unsubscribe = this.board.subscribe(value => {
-            currentBoard = value;
-        });
-        unsubscribe();
-
-        if (!currentBoard) {
-            return
-        };
+        let currentBoard = this.currentBoard;
 
         const isFill = currentBoard.every(row => row.every(cell => cell > 0));
         if (!isFill) {
@@ -312,5 +319,14 @@ export class SudokuViewModel {
         }
 
         this.gameComplete.set(true);
+    }
+
+    private updateState(factory: (state: SudokuState) => SudokuState): void {
+        this.state.update((state) => {
+            const newState = factory(state);
+            const timePass = this.timePass + (Date.now() - this.timeStart) / 1000;
+            GameStorage.saveCurrentGame(this.initialBoard, newState, timePass);
+            return newState;
+        });
     }
 }

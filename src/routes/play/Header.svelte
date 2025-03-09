@@ -6,9 +6,11 @@
 
 	export let levelId: string;
 
-	let timePass = 0;
-
 	const viewModel = getSudokuViewModel();
+	
+	let timePass = viewModel.timePass;
+
+	
 
 	function goBack() {
 		goto(`${base}/`);
