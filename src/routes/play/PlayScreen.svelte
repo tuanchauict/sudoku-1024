@@ -1,7 +1,7 @@
 <script lang="ts">
 	import PlayBoard from './PlayBoard.svelte';
 	import Digits from './Digits.svelte';
-	import type { Board, Level, Digit } from '$lib/repository';
+	import type { Board, Level, Digit } from '$lib/parser';
 	import { SudokuViewModel } from '$lib/SudokuViewModel';
 	import { onMount } from 'svelte';
 	import { setSudokuViewModel } from '$lib/sudokuContext';

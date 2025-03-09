@@ -1,5 +1,5 @@
 import { writable, derived, type Writable, type Readable } from 'svelte/store';
-import type { Board, Digit, Level } from '$lib/repository';
+import type { Board, Digit, Level } from '$lib/parser';
 import type { CellPosition, SudokuState } from './models';
 import { GameStorage } from './storage';
 

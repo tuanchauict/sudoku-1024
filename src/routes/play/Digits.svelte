@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Digit } from '$lib/repository';
+	import type { Digit } from '$lib/parser';
 	import { getSudokuViewModel } from '$lib/sudokuContext';
 	import { onMount } from 'svelte';
 	import NoteIcon from './NoteIcon.svelte';

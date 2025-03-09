@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { type Level } from '$lib/repository';
+	import { type Level } from '$lib/parser';
 	import { base } from '$app/paths';
 
 	export let levelId: Level;

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { type Board } from '$lib/repository';
+	import { type Board } from '$lib/parser';
 	import { onMount } from 'svelte';
 	import { getSudokuViewModel } from '$lib/sudokuContext';
 	import PlayCell from './PlayCell.svelte';

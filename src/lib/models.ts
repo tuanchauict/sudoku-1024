@@ -1,4 +1,4 @@
-import type { Board } from "./repository";
+import type { Board } from "./parser";
 
 export interface CellPosition {
     row: number;
