@@ -71,10 +71,10 @@
 			selectedCell.col += offsetCol;
 		}
 
-		if (selectedCell.row < 0) selectedCell.row = 0;
-		if (selectedCell.row > 8) selectedCell.row = 8;
-		if (selectedCell.col < 0) selectedCell.col = 0;
-		if (selectedCell.col > 8) selectedCell.col = 8;
+		if (selectedCell.row < 0) selectedCell.row = 8;
+		if (selectedCell.row > 8) selectedCell.row = 0;
+		if (selectedCell.col < 0) selectedCell.col = 8;
+		if (selectedCell.col > 8) selectedCell.col = 0;
 
 		viewModel.selectCell(selectedCell.row, selectedCell.col);
 	}
