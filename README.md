@@ -23,7 +23,7 @@ Easy to share with your friends. Simply copy the URL and send it to your friends
 
 ```bash
 # Clone the repository
-git https://github.com/tuanchauict/sudoku-1024/
+git https://github.com/tuanchauict/sudoku-1024.git
 
 # Navigate to project directory
 cd sudoku-1024
