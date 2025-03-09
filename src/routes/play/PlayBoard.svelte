@@ -58,42 +58,44 @@
 </div>
 
 <style>
-	.sudoku-board {
-		border: 2px solid #000;
-		display: flex;
-		flex-direction: column;
-		width: 100%;
-		aspect-ratio: 1;
-		box-sizing: border-box;
-	}
+    .sudoku-board {
+        border: 2px solid #000;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        aspect-ratio: 1;
+        box-sizing: border-box;
+        user-select: none;
+        touch-action: manipulation;
+    }
 
-	.row {
-		display: flex;
-		flex: 1;
-	}
+    .row {
+        display: flex;
+        flex: 1;
+    }
 
-	.cell {
-		flex: 1;
-		position: relative;
-		border-right: 1px solid #000;
-		border-bottom: 1px solid #000;
-		cursor: pointer;
-		overflow: visible;
-	}
+    .cell {
+        flex: 1;
+        position: relative;
+        border-right: 1px solid #000;
+        border-bottom: 1px solid #000;
+        cursor: pointer;
+        overflow: visible;
+    }
 
-	.cell:nth-child(9n) {
-		border-right: none;
-	}
+    .cell:nth-child(9n) {
+        border-right: none;
+    }
 
-	.row:last-child .cell {
-		border-bottom: none;
-	}
+    .row:last-child .cell {
+        border-bottom: none;
+    }
 
-	.border-bottom-thick {
-		border-bottom: 2px solid #000;
-	}
+    .border-bottom-thick {
+        border-bottom: 2px solid #000;
+    }
 
-	.border-right-thick {
-		border-right: 2px solid #000;
-	}
+    .border-right-thick {
+        border-right: 2px solid #000;
+    }
 </style>

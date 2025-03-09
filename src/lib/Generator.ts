@@ -65,17 +65,12 @@ class Generator {
 	}
 
 	prepare() {
-		console.log("Preparing more puzzles...");
-		const t0 = performance.now();
 		for (let i = 0; i < 4; i++) {
-
 			const [level, puzzle] = this.generatePuzzle();
 			if (POOL[level].length < 100) {
 				POOL[level].push(puzzle);
 			}
 		}
-		const t1 = performance.now();
-		console.log(`Generated in ${t1 - t0}ms`);
 	}
 }
 
