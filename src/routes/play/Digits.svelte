@@ -96,6 +96,7 @@
         align-items: center;
         justify-content: center;
         font-size: 1.4rem;
+        font-family: monospace;
         color: black;
         font-weight: bold;
         background-color: #f0f0f0;

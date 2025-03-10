@@ -3,8 +3,9 @@
 	import { getSudokuViewModel } from '$lib/sudokuContext';
 	import { onMount } from 'svelte';
 	import { base } from '$app/paths';
+	import { type Level, LEVELS } from '$lib/models';
 
-	export let levelId: string;
+	export let levelId: Level;
 
 	const viewModel = getSudokuViewModel();
 
@@ -34,7 +35,7 @@
 <div class="header">
 	<button class="back-btn" on:click={goBack}>Back</button>
 	<div class="title">
-		<h1>{levelId}</h1>
+		<h1>{LEVELS[levelId].name}</h1>
 		<h2>{readableTime}</h2>
 	</div>
 	<button class="clear-btn" on:click={clearBoard}>Reset</button>
@@ -56,6 +57,7 @@
         justify-content: center;
         flex-direction: column;
         flex-grow: 1;
+        font-family: monospace;
     }
 
     h1 {

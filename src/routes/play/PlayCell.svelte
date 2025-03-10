@@ -101,6 +101,10 @@
         color: rgb(26, 95, 255);
         user-select: none;
 				font-family: monospace;
+
+				@media (max-device-width: 500px) {
+					font-size: 1.2rem;
+        }
     }
 
     .notes-grid {

@@ -1,44 +1,17 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
-	import { generator, type Level } from '$lib/Generator';
+	import { generator } from '$lib/Generator';
+	import { type Level, LEVELS } from '$lib/models';
+	import Tip from './play/Tip.svelte';
 
 	const logo = `${base}/logo.png`;
 
-	const levels = [
-		{
-			id: 'Easy' as Level,
-			name: 'Easy',
-			color: '#4ade80',
-			gradient: 'linear-gradient(135deg, #4ade80, #22c55e)',
-			icon: '⭐'
-		},
-		{
-			id: 'Medium' as Level,
-			name: 'Medium',
-			color: '#60a5fa',
-			gradient: 'linear-gradient(135deg, #60a5fa, #3b82f6)',
-			icon: '⭐⭐'
-		},
-		{
-			id: 'Hard' as Level,
-			name: 'Hard',
-			color: '#f97316',
-			gradient: 'linear-gradient(135deg, #f97316, #ea580c)',
-			icon: '⭐⭐⭐'
-		},
-		{
-			id: 'Diabolic' as Level,
-			name: 'Diabolic',
-			color: '#ef4444',
-			gradient: 'linear-gradient(135deg, #ef4444, #dc2626)',
-			icon: '⭐⭐⭐⭐'
-		}
-	];
+	const levels = LEVELS.slice(1);
 
-	function selectLevel(levelId: Level) {
-		const board = generator.generateBoardString(levelId);
-		goto(`${base}/play?level=${levelId}&board=${board}`);
+	function selectLevel(levelCode: Level) {
+		const board = generator.generateBoardString(levelCode);
+		goto(`${base}/play?game=${levelCode}${board}`);
 	}
 </script>
 
@@ -51,7 +24,7 @@
 	<div class="levels-container">
 		<h2>Select Level</h2>
 		<div class="levels-grid">
-			{#each levels as level}
+			{#each levels as level (level.id)}
 				<button
 					class="level-card"
 					style="background: {level.gradient};"
