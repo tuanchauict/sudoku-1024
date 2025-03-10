@@ -1,9 +1,14 @@
 <script lang="ts">
 	import PlayScreen from './PlayScreen.svelte';
-	import type { Board, Level } from '$lib/parser';
+	import type { Board } from '$lib/parser';
 	import type { PageData } from '../$types';
+	import { type Level, LEVELS } from '$lib/models';
 
 	export let data: { levelId: Level; board: Board } & PageData;
 </script>
+
+<svelte:head>
+	<title>Sudoku 1024: {LEVELS[data.levelId].name}</title>
+</svelte:head>
 
 <PlayScreen levelId={data.levelId} initialBoard={data.board} />
