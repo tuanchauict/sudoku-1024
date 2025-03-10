@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import { base } from '$app/paths';
 	import { type Level, LEVELS } from '$lib/models';
+	import { appUrl } from '$lib/appUrl';
 
 	export let levelId: Level;
 
@@ -12,7 +13,7 @@
 	let timePass = viewModel.timePass;
 
 	function goBack() {
-		goto(`${base}/`);
+		goto(appUrl('/'));
 	}
 
 	function clearBoard() {

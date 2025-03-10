@@ -1,17 +1,16 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { base } from '$app/paths';
 	import { generator } from '$lib/Generator';
 	import { type Level, LEVELS } from '$lib/models';
-	import Tip from './play/Tip.svelte';
+	import { appUrl } from '$lib/appUrl';
 
-	const logo = `${base}/logo.png`;
+	const logo = appUrl('/logo.png');
 
 	const levels = LEVELS.slice(1);
 
 	function selectLevel(levelCode: Level) {
 		const board = generator.generateBoardString(levelCode);
-		goto(`${base}/play?game=${levelCode}${board}`);
+		goto(appUrl(`/play?game=${levelCode}${board}`));
 	}
 </script>
 

@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { type Level } from '$lib/parser';
-	import { base } from '$app/paths';
+	import { appUrl } from '$lib/appUrl';
+	import type { Level } from '$lib/models';
 
 	export let levelId: Level;
 
 	function startNewGame() {
-		goto(`${base}/`);
+		goto(appUrl('/'));
 	}
 </script>
 
