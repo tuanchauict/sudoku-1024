@@ -21,7 +21,6 @@
 	let board: Board = [];
 	let notes: boolean[][][] = [];
 	let selectedCell = { row: -1, col: -1 };
-	let digitCounts = Array(9).fill(0);
 	let gameComplete = false;
 
 	// State for responsive layout
@@ -43,10 +42,6 @@
 			selectedCell = value;
 		});
 
-		const unsubDigitCounts = viewModel.digitCounts.subscribe((value) => {
-			digitCounts = value;
-		});
-
 		const unsubGameComplete = viewModel.gameComplete.subscribe((value) => {
 			gameComplete = value;
 		});
@@ -55,7 +50,6 @@
 			unsubBoard();
 			unsubNotes();
 			unsubSelectedCell();
-			unsubDigitCounts();
 			unsubGameComplete();
 		};
 	});
@@ -122,7 +116,7 @@
 		</div>
 
 		<div class="controls-container">
-			<Digits {digitCounts} />
+			<Digits />
 		</div>
 	</div>
 

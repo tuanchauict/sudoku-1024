@@ -6,7 +6,7 @@
 	import type { Digit } from '$lib/models';
 	import UndoIcon from './icons/UndoIcon.svelte';
 
-	export let digitCounts: number[] = Array(9).fill(0);
+	let valueCounts: number[] = Array(10).fill(0); // 0-9, 0th index is not used
 
 	let noteMode = false;
 	let isClearable = true;
@@ -28,11 +28,15 @@
 		const unsubCanUndo = viewModel.canUndo.subscribe((value) => {
 			canUndo = value;
 		});
+		const unsubValueCounts = viewModel.valueCounts.subscribe((value) => {
+			valueCounts = value;
+		});
 
 		return () => {
 			unsubNoteMode();
 			unsubEditableCell();
 			unsubCanUndo();
+			unsubValueCounts();
 		};
 	});
 </script>
@@ -41,7 +45,7 @@
 	<div class="digits-container">
 		{#each Array(9).fill(null) as _, i (i)}
 			{@const digit = i + 1}
-			{@const count = digitCounts[i]}
+			{@const count = valueCounts[i+1]}
 			<button
 				class="btn digit-button"
 				class:disabled={count >= 9}

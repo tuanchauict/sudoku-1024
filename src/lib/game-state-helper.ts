@@ -1,4 +1,5 @@
-import type { Board, CellPosition } from '$lib/models';
+import type { Board, CellPosition, SudokuState } from '$lib/models';
+import { equals } from '$lib/utils';
 
 export function findViolatedCells(board: Board): CellPosition[] {
 	const violations: CellPosition[] = [];
@@ -50,4 +51,39 @@ export function findViolatedCells(board: Board): CellPosition[] {
 		}
 	}
 	return violations;
+}
+
+export function detectChangedCell(
+	previousState: SudokuState,
+	currentState: SudokuState
+): CellPosition {
+	let row = 0;
+	let col = 0;
+	for (let i = 0; i < 9; i++) {
+		for (let j = 0; j < 9; j++) {
+			if (
+				currentState.board[i][j] !== previousState.board[i][j] ||
+				!equals(currentState.notes[i][j], previousState.notes[i][j])
+			) {
+				row = i;
+				col = j;
+				break;
+			}
+		}
+	}
+	return { row, col };
+}
+
+export function calculateValueCounts(board: Board): number[] {
+	const counts = Array(10).fill(0); // 0-9, ignore index 0
+
+	for (let row = 0; row < 9; row++) {
+		for (let col = 0; col < 9; col++) {
+			if (board[row][col]) {
+				counts[board[row][col]]++;
+			}
+		}
+	}
+
+	return counts;
 }

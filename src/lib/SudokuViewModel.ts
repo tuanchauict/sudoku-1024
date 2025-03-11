@@ -8,7 +8,7 @@ import {
 	type SudokuState
 } from './models';
 import { GameStorage } from './storage';
-import { findViolatedCells } from '$lib/violate-cells-helper';
+import { calculateValueCounts, detectChangedCell, findViolatedCells } from '$lib/game-state-helper';
 import { equals, getDerivedValue } from '$lib/utils';
 
 const EMPTY_STATE: SudokuState = createSudokuState(0, Array(9).fill(Array(9).fill(0)));
@@ -26,7 +26,6 @@ export class SudokuViewModel {
 	public readonly noteMode: Writable<boolean> = writable(false);
 
 	// Computed values
-	public readonly digitCounts: Readable<number[]>;
 	public readonly valueCounts: Readable<number[]>;
 	public readonly cellEditable: Readable<boolean>;
 	public readonly violatedCells: Readable<CellPosition[]>;
@@ -46,8 +45,7 @@ export class SudokuViewModel {
 		this.selectedCell = derived(this.state, ($state) => $state.selectedCell);
 
 		// Computed values
-		this.digitCounts = derived(this.board, ($board) => this.calculateDigitCounts($board));
-		this.valueCounts = derived(this.board, ($board) => this.calculateValueCounts($board));
+		this.valueCounts = derived(this.board, (board) => calculateValueCounts(board));
 		this.cellEditable = derived(this.selectedCell, ($selectedCell) =>
 			this.isEditableCell($selectedCell.row, $selectedCell.col)
 		);
@@ -157,43 +155,18 @@ export class SudokuViewModel {
 
 	undo(): void {
 		const lastState = this.stateHistoryStack.pop();
-		if (lastState) {
-			this.state.set(lastState);
+		if (!lastState) {
+			return;
 		}
+		this.state.set({
+			...lastState,
+			selectedCell: detectChangedCell(lastState, getDerivedValue(this.state))
+		});
 		this.canUndo.set(this.stateHistoryStack.length > 0);
 	}
 
 	isInitial(row: number, col: number): boolean {
 		return this.initialBoard[row][col] !== 0;
-	}
-
-	// Helper methods for computed values
-	private calculateDigitCounts(board: Board): number[] {
-		const counts = Array(9).fill(0);
-
-		for (let row = 0; row < 9; row++) {
-			for (let col = 0; col < 9; col++) {
-				if (board[row][col] > 0) {
-					counts[board[row][col] - 1]++;
-				}
-			}
-		}
-
-		return counts;
-	}
-
-	private calculateValueCounts(board: Board): number[] {
-		const counts = Array(10).fill(0); // 0-9, ignore index 0
-
-		for (let row = 0; row < 9; row++) {
-			for (let col = 0; col < 9; col++) {
-				if (board[row][col]) {
-					counts[board[row][col]]++;
-				}
-			}
-		}
-
-		return counts;
 	}
 
 	// Helper methods for checking cell relationships
@@ -259,10 +232,7 @@ export class SudokuViewModel {
 			const isSameState =
 				equals(state.board, newState.board) && equals(state.notes, newState.notes);
 			if (!isSameState) {
-				this.stateHistoryStack.push({
-					...state,
-					selectedCell: newState.selectedCell,
-				});
+				this.stateHistoryStack.push(state);
 				this.canUndo.set(true);
 			}
 			return newState;
