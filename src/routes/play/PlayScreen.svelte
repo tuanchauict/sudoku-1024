@@ -61,7 +61,7 @@
 	});
 
 	// Update layout based on window dimensions
-	$: isWideLayout = windowWidth > windowHeight;
+	$: isWideLayout = windowWidth > windowHeight || windowWidth > 650;
 	$: isSquareLayout = windowHeight > 0 && !isWideLayout && windowWidth / windowHeight > 0.65;
 
 	function handleKeydown(event: KeyboardEvent) {
