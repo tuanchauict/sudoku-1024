@@ -10,15 +10,28 @@ export interface CellPosition {
 }
 
 export interface SudokuState {
+	level: Level;
+	initialBoard: Board;
 	board: Board;
 	notes: boolean[][][];
 	selectedCell: CellPosition;
 }
 
-export const EMPTY_STATE: SudokuState = {
-	board: [],
-	notes: [],
-	selectedCell: { row: -1, col: -1 }
+export function createSudokuState(level: Level, initialBoard: Board): SudokuState {
+	const notes = Array(9)
+		.fill(null)
+		.map(() =>
+			Array(9)
+				.fill(null)
+				.map(() => Array(9).fill(false))
+		);
+	return {
+		level,
+		initialBoard,
+		board: initialBoard,
+		notes,
+		selectedCell: { row: -1, col: -1 }
+	};
 }
 
 export interface LevelType {

@@ -44,7 +44,7 @@
 						{rowIndex}
 						{colIndex}
 						{cellValue}
-						isInitial={viewModel.initialBoard[rowIndex][colIndex] !== 0}
+						isInitial={viewModel.isInitial(rowIndex, colIndex)}
 						notes={notes[rowIndex][colIndex]}
 						{selectedCell}
 						{valueCounts}

@@ -1,9 +1,19 @@
 import { writable, derived, type Writable, type Readable } from 'svelte/store';
-import { type Board, type CellPosition, type Digit, EMPTY_STATE, type Level, type SudokuState } from './models';
+import {
+	type Board,
+	type CellPosition,
+	createSudokuState,
+	type Digit,
+	type Level,
+	type SudokuState
+} from './models';
 import { GameStorage } from './storage';
+
+const EMPTY_STATE: SudokuState = createSudokuState(0, Array(9).fill(Array(9).fill(0)));
 
 export class SudokuViewModel {
 	// Private stores
+	private initialBoard: Board = EMPTY_STATE.initialBoard;
 	private readonly state: Writable<SudokuState> = writable(EMPTY_STATE);
 
 	// Public derived stores
@@ -21,21 +31,11 @@ export class SudokuViewModel {
 	// Public stores for game completion
 	public gameComplete: Writable<boolean> = writable(false);
 
-	public timePass: number;
-	private timeStart: number = Date.now();
+	public readonly timePass: Writable<number> = writable(0);
+	private readonly timeStart: Writable<number> = writable(Date.now());
 
-	constructor(
-		public levelId: Level,
-		public initialBoard: Board
-	) {
-		const savedGame = GameStorage.loadCurrentGame(initialBoard);
-		const state = savedGame ? savedGame.state : SudokuViewModel.createState(initialBoard);
-		this.timePass = savedGame ? savedGame.timePass : 0;
-		// Initialize the state
-		this.state = writable<SudokuState>(state);
-
+	constructor() {
 		// Create derived stores for each piece of state
-
 		this.board = derived(this.state, ($state) => $state.board);
 		this.notes = derived(this.state, ($state) => $state.notes);
 		this.selectedCell = derived(this.state, ($state) => $state.selectedCell);
@@ -49,45 +49,19 @@ export class SudokuViewModel {
 		this.violatedCells = derived(this.board, ($board) => this.findViolatedCells($board));
 	}
 
-	private static createState(initialBoard: Board): SudokuState {
-		return {
-			board: initialBoard,
-			notes: Array(9)
-				.fill(null)
-				.map(() =>
-					Array(9)
-						.fill(null)
-						.map(() => Array(9).fill(false))
-				),
-			selectedCell: { row: -1, col: -1 }
-		};
+	init(level: Level, initialBoard: Board) {
+		const savedGame = GameStorage.loadCurrentGame(initialBoard);
+		const state = savedGame ? savedGame.state : createSudokuState(level, initialBoard);
+
+		this.state.set(state);
+		this.initialBoard = initialBoard;
+
+		this.timePass.set(savedGame ? savedGame.timePass : 0);
+		this.timeStart.set(Date.now());
 	}
 
 	private get isInNodeMode(): boolean {
-		let currentNoteMode: boolean = false;
-		const unsubscribe = this.noteMode.subscribe((value) => {
-			currentNoteMode = value;
-		});
-		unsubscribe();
-		return currentNoteMode;
-	}
-
-	private get currentSelectedCell(): CellPosition {
-		let currentSelectedCell: CellPosition = { row: -1, col: -1 };
-		const unsubscribe = this.selectedCell.subscribe((value) => {
-			currentSelectedCell = value;
-		});
-		unsubscribe();
-		return currentSelectedCell;
-	}
-
-	private get currentBoard(): Board {
-		let currentBoard: Board = this.initialBoard;
-		const unsubscribe = this.board.subscribe((value) => {
-			currentBoard = value;
-		});
-		unsubscribe();
-		return currentBoard;
+		return getDerivedValue(this.noteMode);
 	}
 
 	public clearBoard(): void {
@@ -178,6 +152,10 @@ export class SudokuViewModel {
 		this.gameComplete.set(false);
 	}
 
+	isInitial(row: number, col: number): boolean {
+		return this.initialBoard[row][col] !== 0;
+	}
+
 	// Helper methods for computed values
 	private calculateDigitCounts(board: Board): number[] {
 		const counts = Array(9).fill(0);
@@ -209,7 +187,7 @@ export class SudokuViewModel {
 
 	// Helper methods for checking cell relationships
 	public isSameBox(row: number, col: number): boolean {
-		const currentSelectedCell = this.currentSelectedCell;
+		const currentSelectedCell = getDerivedValue(this.selectedCell);
 
 		if (!currentSelectedCell || currentSelectedCell.row === -1 || currentSelectedCell.col === -1) {
 			return false;
@@ -224,8 +202,8 @@ export class SudokuViewModel {
 	}
 
 	public hasSameValue(row: number, col: number): boolean {
-		const selectedCell = this.currentSelectedCell;
-		const currentBoard = this.currentBoard;
+		const selectedCell = getDerivedValue(this.selectedCell);
+		const currentBoard = getDerivedValue(this.board);
 
 		if (!selectedCell || !currentBoard || selectedCell.row === -1 || selectedCell.col === -1) {
 			return false;
@@ -295,7 +273,7 @@ export class SudokuViewModel {
 	}
 
 	private updateCompleteState() {
-		const currentBoard = this.currentBoard;
+		const currentBoard = getDerivedValue(this.board);
 
 		const isFill = currentBoard.every((row) => row.every((cell) => cell > 0));
 		if (!isFill) {
@@ -315,9 +293,19 @@ export class SudokuViewModel {
 	private updateState(factory: (state: SudokuState) => SudokuState): void {
 		this.state.update((state) => {
 			const newState = factory(state);
-			const timePass = this.timePass + (Date.now() - this.timeStart) / 1000;
+			const timeStart = getDerivedValue(this.timeStart);
+			const timePass = getDerivedValue(this.timePass) + (Date.now() - timeStart) / 1000;
 			GameStorage.saveCurrentGame(this.initialBoard, newState, timePass);
 			return newState;
 		});
 	}
+}
+
+function getDerivedValue<T>(store: Readable<T>): T {
+	let value: T;
+	const unsubscribe = store.subscribe((v) => {
+		value = v;
+	});
+	unsubscribe();
+	return value!;
 }

@@ -12,7 +12,9 @@
 	export let initialBoard: Board;
 
 	// Create the view model and set it in context
-	const viewModel = new SudokuViewModel(levelId, initialBoard);
+	const viewModel = new SudokuViewModel();
+	viewModel.init(levelId, initialBoard);
+
 	setSudokuViewModel(viewModel);
 
 	// Create reactive variables from stores

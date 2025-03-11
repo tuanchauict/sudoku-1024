@@ -2,7 +2,6 @@
 	import { goto } from '$app/navigation';
 	import { getSudokuViewModel } from '$lib/sudokuContext';
 	import { onMount } from 'svelte';
-	import { base } from '$app/paths';
 	import { type Level, LEVELS } from '$lib/models';
 	import { appUrl } from '$lib/appUrl';
 
@@ -10,7 +9,7 @@
 
 	const viewModel = getSudokuViewModel();
 
-	let timePass = viewModel.timePass;
+	let timePass = 0;
 
 	function goBack() {
 		goto(appUrl('/'));
@@ -25,8 +24,13 @@
 			timePass++;
 		}, 1000);
 
+		const unsubTime = viewModel.timePass.subscribe((value) => {
+			timePass = value;
+		});
+
 		return () => {
 			clearInterval(interval);
+			unsubTime();
 		};
 	});
 
