@@ -17,7 +17,7 @@
 <div class="container">
 	<h1>SUDOKU</h1>
 	<div class="logo">
-		<img src="{logo}" alt="Sudoku Logo"  style="width: 118%; height: 118%" />
+		<img src="{logo}" alt="Sudoku Logo" />
 	</div>
 
 	<div class="levels-container">
@@ -45,9 +45,9 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        height: 100vh;
         width: 100vw;
         padding-top: 24px;
+				padding-bottom: 3rem;
         background-color: #f8fafc;
 				font-family: monospace;
     }
@@ -72,12 +72,18 @@
         align-items: center;
         justify-content: center;
         border-radius: 12px;
+				border: 0.5px solid black;
         margin-bottom: 36px;
         box-shadow: 0 5px 15px -3px rgba(0, 0, 0, 0.4),
         0 4px 6px -2px rgba(0, 0, 0, 0.05);
         text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
         position: relative;
         overflow: hidden;
+
+				img {
+						width: calc(100% + 1px);
+						height: calc(100% + 1px);
+				}
     }
 
     .logo::after {
@@ -131,7 +137,7 @@
         text-align: center;
         cursor: pointer;
         overflow: hidden;
-        height: 72px;
+        height: 64px;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
         0 2px 4px -1px rgba(0, 0, 0, 0.06);
         transition: all 0.3s ease;
@@ -158,7 +164,7 @@
     }
 
     .level-name {
-        font-size: 1.8rem;
+        font-size: 1.4rem;
         color: white;
         font-weight: bold;
         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
