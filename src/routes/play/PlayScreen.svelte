@@ -1,13 +1,12 @@
 <script lang="ts">
 	import PlayBoard from './PlayBoard.svelte';
 	import Digits from './Digits.svelte';
-	import type { Board, Digit } from '$lib/parser';
 	import { SudokuViewModel } from '$lib/SudokuViewModel';
 	import { onMount } from 'svelte';
 	import { setSudokuViewModel } from '$lib/sudokuContext';
 	import GameCompleteScreen from './GameCompleteScreen.svelte';
 	import Header from './Header.svelte';
-	import { type Level } from '$lib/models';
+	import { type Board, type Digit, type Level } from '$lib/models';
 
 	export let levelId: Level;
 	export let initialBoard: Board;

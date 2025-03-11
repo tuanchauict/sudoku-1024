@@ -1,5 +1,4 @@
-import type { SudokuState } from './models';
-import type { Board } from './parser';
+import type { Board, SudokuState } from './models';
 import { encodeToBASE64URL } from '$lib/encoder';
 
 const GAME_PREFIX = 'sudoku';

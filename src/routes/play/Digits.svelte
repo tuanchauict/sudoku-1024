@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { Digit } from '$lib/parser';
 	import { getSudokuViewModel } from '$lib/sudokuContext';
 	import { onMount } from 'svelte';
 	import NoteIcon from './NoteIcon.svelte';
 	import Tip from './Tip.svelte';
+	import type { Digit } from '$lib/models';
 
 	export let digitCounts: number[] = Array(9).fill(0);
 

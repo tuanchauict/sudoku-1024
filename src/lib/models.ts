@@ -1,4 +1,8 @@
-import type { Board } from './parser';
+export type Level = 0 | 1 | 2 | 3 | 4;
+
+export type Digit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+
+export type Board = Digit[][];
 
 export interface CellPosition {
 	row: number;
@@ -11,7 +15,11 @@ export interface SudokuState {
 	selectedCell: CellPosition;
 }
 
-export type Level = 0 | 1 | 2 | 3 | 4;
+export const EMPTY_STATE: SudokuState = {
+	board: [],
+	notes: [],
+	selectedCell: { row: -1, col: -1 }
+}
 
 export interface LevelType {
 	id: Level;

@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { type Board } from '$lib/parser';
 	import { onMount } from 'svelte';
 	import { getSudokuViewModel } from '$lib/sudokuContext';
 	import PlayCell from './PlayCell.svelte';
-	import type { CellPosition } from '$lib/models';
+	import type { Board, CellPosition } from '$lib/models';
 
 	export let board: Board = [];
 	export let notes: boolean[][][] = [];
@@ -33,9 +32,9 @@
 </script>
 
 <div class="sudoku-board">
-	{#each board as row, rowIndex}
+	{#each board as row, rowIndex (rowIndex)}
 		<div class="row">
-			{#each row as cellValue, colIndex}
+			{#each row as cellValue, colIndex (colIndex)}
 				<div
 					class="cell"
 					class:border-bottom-thick={rowIndex % 3 === 2 && rowIndex < 8}

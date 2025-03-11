@@ -1,8 +1,7 @@
 <script lang="ts">
 	import PlayScreen from './PlayScreen.svelte';
-	import type { Board } from '$lib/parser';
 	import type { PageData } from '../$types';
-	import { type Level, LEVELS } from '$lib/models';
+	import { type Board, type Level, LEVELS } from '$lib/models';
 
 	export let data: { levelId: Level; board: Board } & PageData;
 </script>

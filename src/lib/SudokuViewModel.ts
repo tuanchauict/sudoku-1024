@@ -1,11 +1,10 @@
 import { writable, derived, type Writable, type Readable } from 'svelte/store';
-import type { Board, Digit } from '$lib/parser';
-import type { CellPosition, Level, SudokuState } from './models';
+import { type Board, type CellPosition, type Digit, EMPTY_STATE, type Level, type SudokuState } from './models';
 import { GameStorage } from './storage';
 
 export class SudokuViewModel {
 	// Private stores
-	private readonly state: Writable<SudokuState>;
+	private readonly state: Writable<SudokuState> = writable(EMPTY_STATE);
 
 	// Public derived stores
 	public readonly board: Readable<Board>;
