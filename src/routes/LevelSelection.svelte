@@ -43,9 +43,11 @@
 <style>
     .container {
         display: flex;
+				box-sizing: border-box;
         flex-direction: column;
         align-items: center;
         width: 100vw;
+				min-height: 100vh;
         padding-top: 24px;
 				padding-bottom: 3rem;
         background-color: #f8fafc;
