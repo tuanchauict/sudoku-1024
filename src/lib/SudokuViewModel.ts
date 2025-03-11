@@ -8,6 +8,8 @@ import {
 	type SudokuState
 } from './models';
 import { GameStorage } from './storage';
+import { findViolatedCells } from '$lib/violate-cells-helper';
+import { equals, getDerivedValue } from '$lib/utils';
 
 const EMPTY_STATE: SudokuState = createSudokuState(0, Array(9).fill(Array(9).fill(0)));
 
@@ -15,6 +17,7 @@ export class SudokuViewModel {
 	// Private stores
 	private initialBoard: Board = EMPTY_STATE.initialBoard;
 	private readonly state: Writable<SudokuState> = writable(EMPTY_STATE);
+	private readonly stateHistoryStack: SudokuState[] = [];
 
 	// Public derived stores
 	public readonly board: Readable<Board>;
@@ -46,7 +49,7 @@ export class SudokuViewModel {
 		this.cellEditable = derived(this.selectedCell, ($selectedCell) =>
 			this.isEditableCell($selectedCell.row, $selectedCell.col)
 		);
-		this.violatedCells = derived(this.board, ($board) => this.findViolatedCells($board));
+		this.violatedCells = derived(this.board, (board) => findViolatedCells(board));
 	}
 
 	init(level: Level, initialBoard: Board) {
@@ -55,6 +58,7 @@ export class SudokuViewModel {
 
 		this.state.set(state);
 		this.initialBoard = initialBoard;
+		this.stateHistoryStack.length = 0;
 
 		this.timePass.set(savedGame ? savedGame.timePass : 0);
 		this.timeStart.set(Date.now());
@@ -64,7 +68,7 @@ export class SudokuViewModel {
 		return getDerivedValue(this.noteMode);
 	}
 
-	public clearBoard(): void {
+	clearBoard(): void {
 		this.updateState((state) => ({
 			...state,
 			board: this.initialBoard,
@@ -81,19 +85,19 @@ export class SudokuViewModel {
 		this.gameComplete.set(false);
 	}
 
-	public selectCell(row: number, col: number): void {
+	selectCell(row: number, col: number): void {
 		this.updateState((state) => ({
 			...state,
 			selectedCell: { row, col }
 		}));
 	}
 
-	public toggleNoteMode(): void {
+	toggleNoteMode(): void {
 		this.noteMode.set(!this.isInNodeMode);
 	}
 
 	// Handle number input
-	public enterDigit(digit: Digit): void {
+	enterDigit(digit: Digit): void {
 		this.updateState((state) => {
 			const { row, col } = state.selectedCell;
 			if (!this.isEditableCell(row, col)) {
@@ -122,11 +126,9 @@ export class SudokuViewModel {
 		this.updateCompleteState();
 	}
 
-	// Clear the selected cell
-	public clearSelectedCell(): void {
+	clearSelectedCell(): void {
 		this.updateState((state) => {
 			const { row, col } = state.selectedCell;
-
 			if (!this.isEditableCell(row, col)) {
 				return state;
 			}
@@ -150,6 +152,13 @@ export class SudokuViewModel {
 			};
 		});
 		this.gameComplete.set(false);
+	}
+
+	undo(): void {
+		const lastState = this.stateHistoryStack.pop();
+		if (lastState) {
+			this.state.set(lastState);
+		}
 	}
 
 	isInitial(row: number, col: number): boolean {
@@ -186,7 +195,7 @@ export class SudokuViewModel {
 	}
 
 	// Helper methods for checking cell relationships
-	public isSameBox(row: number, col: number): boolean {
+	isSameBox(row: number, col: number): boolean {
 		const currentSelectedCell = getDerivedValue(this.selectedCell);
 
 		if (!currentSelectedCell || currentSelectedCell.row === -1 || currentSelectedCell.col === -1) {
@@ -201,7 +210,7 @@ export class SudokuViewModel {
 		return boxRow === selectedBoxRow && boxCol === selectedBoxCol;
 	}
 
-	public hasSameValue(row: number, col: number): boolean {
+	hasSameValue(row: number, col: number): boolean {
 		const selectedCell = getDerivedValue(this.selectedCell);
 		const currentBoard = getDerivedValue(this.board);
 
@@ -220,58 +229,6 @@ export class SudokuViewModel {
 		return this.initialBoard[row][col] === 0;
 	}
 
-	private findViolatedCells($board: Board): CellPosition[] {
-		const violations: CellPosition[] = [];
-
-		// Helper to check if a position is already in the violations list
-		const isAlreadyViolated = (row: number, col: number) => {
-			return violations.some((pos) => pos.row === row && pos.col === col);
-		};
-
-		// Check each cell
-		for (let row = 0; row < 9; row++) {
-			for (let col = 0; col < 9; col++) {
-				const value = $board[row][col];
-
-				// Skip empty cells
-				if (!value) continue;
-
-				// Skip cells already marked as violations
-				if (isAlreadyViolated(row, col)) continue;
-
-				// Check row
-				for (let c = 0; c < 9; c++) {
-					if (c !== col && $board[row][c] === value) {
-						if (!isAlreadyViolated(row, col)) violations.push({ row, col });
-						if (!isAlreadyViolated(row, c)) violations.push({ row, col: c });
-					}
-				}
-
-				// Check column
-				for (let r = 0; r < 9; r++) {
-					if (r !== row && $board[r][col] === value) {
-						if (!isAlreadyViolated(row, col)) violations.push({ row, col });
-						if (!isAlreadyViolated(r, col)) violations.push({ row: r, col });
-					}
-				}
-
-				// Check 3x3 box
-				const boxRow = Math.floor(row / 3) * 3;
-				const boxCol = Math.floor(col / 3) * 3;
-
-				for (let r = boxRow; r < boxRow + 3; r++) {
-					for (let c = boxCol; c < boxCol + 3; c++) {
-						if ((r !== row || c !== col) && $board[r][c] === value) {
-							if (!isAlreadyViolated(row, col)) violations.push({ row, col });
-							if (!isAlreadyViolated(r, c)) violations.push({ row: r, col: c });
-						}
-					}
-				}
-			}
-		}
-		return violations;
-	}
-
 	private updateCompleteState() {
 		const currentBoard = getDerivedValue(this.board);
 
@@ -281,7 +238,7 @@ export class SudokuViewModel {
 			return;
 		}
 
-		const hasViolations = this.findViolatedCells(currentBoard).length > 0;
+		const hasViolations = findViolatedCells(currentBoard).length > 0;
 		if (hasViolations) {
 			this.gameComplete.set(false);
 			return;
@@ -296,16 +253,13 @@ export class SudokuViewModel {
 			const timeStart = getDerivedValue(this.timeStart);
 			const timePass = getDerivedValue(this.timePass) + (Date.now() - timeStart) / 1000;
 			GameStorage.saveCurrentGame(this.initialBoard, newState, timePass);
+
+			const shouldRecordHistory =
+				equals(state.board, newState.board) && equals(state.notes, newState.notes);
+			if (shouldRecordHistory) {
+				this.stateHistoryStack.push(state);
+			}
 			return newState;
 		});
 	}
-}
-
-function getDerivedValue<T>(store: Readable<T>): T {
-	let value: T;
-	const unsubscribe = store.subscribe((v) => {
-		value = v;
-	});
-	unsubscribe();
-	return value!;
 }
