@@ -51,7 +51,7 @@
 			viewModel.enterDigit(digit);
 		} else if (event.key === 'Backspace') {
 			viewModel.clearSelectedCell();
-		} else if (event.key === 'Enter') {
+		} else if (event.key === 'Enter' || event.key === ' ') {
 			viewModel.toggleNoteMode();
 		} else if (event.key === 'ArrowUp') {
 			moveSelection(-1, 0);
