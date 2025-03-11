@@ -1,24 +1,21 @@
 <script lang="ts">
 	import { getSudokuViewModel } from '$lib/sudokuContext';
 	import { onMount } from 'svelte';
-	import NoteIcon from './NoteIcon.svelte';
+	import NoteIcon from './icons/NoteIcon.svelte';
 	import Tip from './Tip.svelte';
 	import type { Digit } from '$lib/models';
+	import UndoIcon from './icons/UndoIcon.svelte';
 
 	export let digitCounts: number[] = Array(9).fill(0);
 
 	let noteMode = false;
 	let isClearable = true;
+	let canUndo = false;
 
-	// Get the ViewModel from context
 	const viewModel = getSudokuViewModel();
 
 	function handleDigitClick(digit: number) {
 		viewModel.enterDigit(digit as Digit);
-	}
-
-	function toggleNoteMode() {
-		viewModel.toggleNoteMode();
 	}
 
 	onMount(() => {
@@ -28,10 +25,14 @@
 		const unsubEditableCell = viewModel.cellEditable.subscribe((value) => {
 			isClearable = value;
 		});
+		const unsubCanUndo = viewModel.canUndo.subscribe((value) => {
+			canUndo = value;
+		});
 
 		return () => {
 			unsubNoteMode();
 			unsubEditableCell();
+			unsubCanUndo();
 		};
 	});
 </script>
@@ -42,7 +43,7 @@
 			{@const digit = i + 1}
 			{@const count = digitCounts[i]}
 			<button
-				class="digit-button"
+				class="btn digit-button"
 				class:disabled={count >= 9}
 				on:click={() => handleDigitClick(digit)}
 				disabled={count >= 9}
@@ -52,7 +53,7 @@
 		{/each}
 
 		<button
-			class="digit-button clear-btn"
+			class="btn digit-button clear-btn"
 			disabled={!isClearable}
 			on:click={() => viewModel.clearSelectedCell()}
 		>
@@ -61,7 +62,11 @@
 	</div>
 
 	<div class="actions-container">
-		<button class="action-button note-btn" class:active={noteMode} on:click={toggleNoteMode}>
+		<button class="btn action-button" disabled={!canUndo} on:click={() => viewModel.undo()}>
+			<UndoIcon />
+			<span>Undo</span>
+		</button>
+		<button class="btn action-button note-btn" class:active={noteMode} on:click={() => viewModel.toggleNoteMode()}>
 			<NoteIcon />
 			<span>Note</span>
 		</button>
@@ -89,36 +94,51 @@
         max-width: 300px;
     }
 
-    .digit-button {
-        width: calc(20% - 8px);
-        aspect-ratio: 1;
+		.btn {
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.4rem;
         font-family: monospace;
         color: black;
-        font-weight: bold;
         background-color: #f0f0f0;
         border: 1px solid #ccc;
         border-radius: 4px;
         cursor: pointer;
-        position: relative;
 
         -webkit-tap-highlight-color: transparent;
         -webkit-touch-callout: none;
         -webkit-user-select: none;
         user-select: none;
         -webkit-appearance: none;
-				appearance: none;
+        appearance: none;
         touch-action: manipulation;
+
+        &:active {
+            transition: background-color 0.1s;
+        }
+
+        &:disabled {
+            opacity: 0.5;
+            color: #999;
+        }
+
+				&:hover:not(.disabled) {
+            background-color: #e0e0e0;
+        }
+		}
+
+    .digit-button {
+        width: calc(20% - 8px);
+        aspect-ratio: 1;
+        font-size: 1.4rem;
+        position: relative;
 
 				&:active {
             transition: background-color 0.1s;
 				}
 
 				&:disabled {
-						color: #999;
+						cursor: not-allowed;
 				}
     }
 
@@ -133,33 +153,28 @@
         }
     }
 
-    .digit-button:hover:not(.disabled) {
-        background-color: #e0e0e0;
-    }
-
-    .digit-button.disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-        background-color: #ddd;
-    }
-
     .clear-btn {
         color: #4b5563;
         font-size: 1.4rem;
-    }
 
-    .digit-button.clear-btn:hover {
-        background-color: #fee2e2;
-        color: #ef4444;
-    }
+				&:active {
+            background-color: #fecaca;
+        }
 
-    .clear-btn:active {
-        background-color: #fecaca;
-    }
+				&:hover {
+            background-color: #fee2e2;
+            color: #ef4444;
 
-    .clear-btn:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
+						&:disabled {
+								background-color: #f3f4f6;
+								color: #999;
+            }
+				}
+
+				&:disabled {
+						opacity: 0.5;
+						cursor: not-allowed;
+				}
     }
 
     .actions-container {
@@ -171,24 +186,21 @@
     }
 
     .action-button {
-        display: flex;
         flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        background-color: #f3f4f6;
-        border: none;
-        border-radius: 8px;
         padding: 12px 24px;
         gap: 8px;
-        font-size: 1.2rem;
-        cursor: pointer;
+        font-size: 1rem;
         transition: all 0.2s;
         color: #4b5563;
         width: 100%;
+
+        &:disabled {
+            color: #999;
+						cursor: auto;
+        }
     }
 
     .note-btn {
-        font-size: 1rem;
         background-color: #f3f4f6;
 
         &:hover {
@@ -199,6 +211,7 @@
         &.active {
             background-color: #3b82f6;
             color: white;
+						border-color: #3b82f6;
 
             &:hover {
                 background-color: #2563eb;

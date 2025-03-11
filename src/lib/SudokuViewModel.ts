@@ -37,6 +37,8 @@ export class SudokuViewModel {
 	public readonly timePass: Writable<number> = writable(0);
 	private readonly timeStart: Writable<number> = writable(Date.now());
 
+	public readonly canUndo: Writable<boolean> = writable(false);
+
 	constructor() {
 		// Create derived stores for each piece of state
 		this.board = derived(this.state, ($state) => $state.board);
@@ -79,7 +81,6 @@ export class SudokuViewModel {
 						.fill(null)
 						.map(() => Array(9).fill(false))
 				),
-			selectedCell: { row: -1, col: -1 },
 			noteMode: false
 		}));
 		this.gameComplete.set(false);
@@ -159,6 +160,7 @@ export class SudokuViewModel {
 		if (lastState) {
 			this.state.set(lastState);
 		}
+		this.canUndo.set(this.stateHistoryStack.length > 0);
 	}
 
 	isInitial(row: number, col: number): boolean {
@@ -254,10 +256,14 @@ export class SudokuViewModel {
 			const timePass = getDerivedValue(this.timePass) + (Date.now() - timeStart) / 1000;
 			GameStorage.saveCurrentGame(this.initialBoard, newState, timePass);
 
-			const shouldRecordHistory =
+			const isSameState =
 				equals(state.board, newState.board) && equals(state.notes, newState.notes);
-			if (shouldRecordHistory) {
-				this.stateHistoryStack.push(state);
+			if (!isSameState) {
+				this.stateHistoryStack.push({
+					...state,
+					selectedCell: newState.selectedCell,
+				});
+				this.canUndo.set(true);
 			}
 			return newState;
 		});

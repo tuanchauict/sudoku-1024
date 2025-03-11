@@ -64,30 +64,11 @@
 	$: isWideLayout = windowWidth > windowHeight;
 	$: isSquareLayout = windowHeight > 0 && !isWideLayout && windowWidth / windowHeight > 0.65;
 
-	function moveSelection(offsetRow: number, offsetCol: number) {
-		if (selectedCell.row === -1 || selectedCell.col === -1) {
-			selectedCell.row = 0;
-			selectedCell.col = 0;
-		} else {
-			selectedCell.row += offsetRow;
-			selectedCell.col += offsetCol;
-		}
-
-		if (selectedCell.row < 0) selectedCell.row = 8;
-		if (selectedCell.row > 8) selectedCell.row = 0;
-		if (selectedCell.col < 0) selectedCell.col = 8;
-		if (selectedCell.col > 8) selectedCell.col = 0;
-
-		viewModel.selectCell(selectedCell.row, selectedCell.col);
-	}
-
-	// Handle keyboard input
 	function handleKeydown(event: KeyboardEvent) {
 		if (gameComplete) {
 			return;
 		}
 
-		// Only proceed if key is a number from 1-9
 		if (event.key.match(/[1-9]/)) {
 			const digit = parseInt(event.key, 10) as Digit;
 			viewModel.enterDigit(digit);
@@ -103,7 +84,26 @@
 			moveSelection(0, -1);
 		} else if (event.key === 'ArrowRight') {
 			moveSelection(0, 1);
+		} else if (event.key === 'z' && (event.ctrlKey || event.metaKey)) {
+			viewModel.undo();
 		}
+	}
+
+	function moveSelection(offsetRow: number, offsetCol: number) {
+		if (selectedCell.row === -1 || selectedCell.col === -1) {
+			selectedCell.row = 0;
+			selectedCell.col = 0;
+		} else {
+			selectedCell.row += offsetRow;
+			selectedCell.col += offsetCol;
+		}
+
+		if (selectedCell.row < 0) selectedCell.row = 8;
+		if (selectedCell.row > 8) selectedCell.row = 0;
+		if (selectedCell.col < 0) selectedCell.col = 8;
+		if (selectedCell.col > 8) selectedCell.col = 0;
+
+		viewModel.selectCell(selectedCell.row, selectedCell.col);
 	}
 </script>
 
