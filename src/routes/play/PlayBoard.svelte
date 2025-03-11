@@ -4,9 +4,9 @@
 	import PlayCell from './PlayCell.svelte';
 	import type { Board, CellPosition } from '$lib/models';
 
-	export let board: Board = [];
-	export let notes: boolean[][][] = [];
-	export let selectedCell = { row: -1, col: -1 };
+	let board: Board = [];
+	let notes: boolean[][][] = [];
+	let selectedCell = { row: -1, col: -1 };
 
 	// Get the ViewModel from context
 	const viewModel = getSudokuViewModel();
@@ -17,6 +17,18 @@
 
 	// Subscribe to the valueCounts store once the component is mounted
 	onMount(() => {
+		const unsubBoard = viewModel.board.subscribe((value) => {
+			board = value;
+		});
+
+		const unsubNotes = viewModel.notes.subscribe((value) => {
+			notes = value;
+		});
+
+		const unsubSelectedCell = viewModel.selectedCell.subscribe((value) => {
+			selectedCell = value;
+		});
+
 		const unsubValueCount = viewModel.valueCounts.subscribe((value) => {
 			valueCounts = value;
 		});
@@ -25,6 +37,9 @@
 		});
 
 		return () => {
+			unsubBoard();
+			unsubNotes();
+			unsubSelectedCell();
 			unsubValueCount();
 			unsubViolatedCells();
 		};

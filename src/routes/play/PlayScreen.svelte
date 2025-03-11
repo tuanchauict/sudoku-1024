@@ -7,6 +7,7 @@
 	import GameCompleteScreen from './GameCompleteScreen.svelte';
 	import Header from './Header.svelte';
 	import { type Board, type Digit, type Level } from '$lib/models';
+	import { getDerivedValue } from '$lib/utils';
 
 	export let levelId: Level;
 	export let initialBoard: Board;
@@ -18,9 +19,6 @@
 	setSudokuViewModel(viewModel);
 
 	// Create reactive variables from stores
-	let board: Board = [];
-	let notes: boolean[][][] = [];
-	let selectedCell = { row: -1, col: -1 };
 	let gameComplete = false;
 
 	// State for responsive layout
@@ -30,26 +28,11 @@
 
 	// Subscribe to stores from the viewModel
 	onMount(() => {
-		const unsubBoard = viewModel.board.subscribe((value) => {
-			board = value;
-		});
-
-		const unsubNotes = viewModel.notes.subscribe((value) => {
-			notes = value;
-		});
-
-		const unsubSelectedCell = viewModel.selectedCell.subscribe((value) => {
-			selectedCell = value;
-		});
-
 		const unsubGameComplete = viewModel.gameComplete.subscribe((value) => {
 			gameComplete = value;
 		});
 
 		return () => {
-			unsubBoard();
-			unsubNotes();
-			unsubSelectedCell();
 			unsubGameComplete();
 		};
 	});
@@ -84,6 +67,7 @@
 	}
 
 	function moveSelection(offsetRow: number, offsetCol: number) {
+		const selectedCell = getDerivedValue(viewModel.selectedCell);
 		if (selectedCell.row === -1 || selectedCell.col === -1) {
 			selectedCell.row = 0;
 			selectedCell.col = 0;
@@ -112,7 +96,7 @@
 
 	<div class="game-content" class:wide-layout={isWideLayout}>
 		<div class="board-container" class:square-layout={isSquareLayout}>
-			<PlayBoard {board} {notes} {selectedCell} />
+			<PlayBoard />
 		</div>
 
 		<div class="controls-container">

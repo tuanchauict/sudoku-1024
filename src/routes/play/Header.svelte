@@ -10,6 +10,7 @@
 	const viewModel = getSudokuViewModel();
 
 	let timePass = 0;
+	let gameComplete = false;
 
 	function goBack() {
 		goto(appUrl('/'));
@@ -21,16 +22,23 @@
 
 	onMount(() => {
 		const interval = setInterval(() => {
-			timePass++;
+			if (!gameComplete) {
+				timePass++;
+			}
 		}, 1000);
 
 		const unsubTime = viewModel.timePass.subscribe((value) => {
 			timePass = value;
 		});
 
+		const unsubGameComplete = viewModel.gameComplete.subscribe((value) => {
+			gameComplete = value;
+		});
+
 		return () => {
 			clearInterval(interval);
 			unsubTime();
+			unsubGameComplete();
 		};
 	});
 
