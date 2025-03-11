@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { getSudokuViewModel } from '$lib/sudokuContext';
-	import type { CellPosition } from '$lib/SudokuViewModel';
+	import type { CellPosition } from '$lib/models';
 
 	export let rowIndex: number;
 	export let colIndex: number;

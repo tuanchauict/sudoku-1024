@@ -25,13 +25,13 @@
 		const unsubNoteMode = viewModel.noteMode.subscribe((value) => {
 			noteMode = value;
 		});
-		const ubsubEditableCell = viewModel.cellEditable.subscribe((value) => {
+		const unsubEditableCell = viewModel.cellEditable.subscribe((value) => {
 			isClearable = value;
 		});
 
 		return () => {
 			unsubNoteMode();
-			ubsubEditableCell();
+			unsubEditableCell();
 		};
 	});
 </script>
@@ -110,6 +110,7 @@
         -webkit-user-select: none;
         user-select: none;
         -webkit-appearance: none;
+				appearance: none;
         touch-action: manipulation;
 
 				&:active {

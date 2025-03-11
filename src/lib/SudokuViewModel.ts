@@ -1,8 +1,7 @@
 import { writable, derived, type Writable, type Readable } from 'svelte/store';
 import type { Board, Digit } from '$lib/parser';
-import type { CellPosition, SudokuState } from './models';
+import type { CellPosition, Level, SudokuState } from './models';
 import { GameStorage } from './storage';
-import type { Level } from '$lib/Generator';
 
 export class SudokuViewModel {
 	// Private stores
