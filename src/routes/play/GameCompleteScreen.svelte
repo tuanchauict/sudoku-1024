@@ -10,6 +10,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Sudoku 1024: {LEVELS[levelId].name} Complete</title>
+</svelte:head>
+
 <div class="overlay">
 	<div class="complete-card">
 		<h2>Puzzle Completed!</h2>
@@ -49,15 +53,15 @@
         color: #3b82f6;
         font-size: 24px;
         margin-top: 0;
-				font-family: monospace;
+        font-family: monospace;
     }
 
     p {
         font-size: 16px;
         color: #4b5563;
         margin-bottom: 24px;
-				line-height: 1.5;
-				font-family: monospace;
+        line-height: 1.5;
+        font-family: monospace;
     }
 
     .new-game-btn {
@@ -70,7 +74,7 @@
         border-radius: 6px;
         cursor: pointer;
         transition: background-color 0.2s;
-				font-family: monospace;
+        font-family: monospace;
     }
 
     .new-game-btn:hover {
