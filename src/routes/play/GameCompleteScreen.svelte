@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { appUrl } from '$lib/appUrl';
-	import type { Level } from '$lib/models';
+	import { type Level, LEVELS } from '$lib/models';
 
 	export let levelId: Level;
 
@@ -13,7 +13,7 @@
 <div class="overlay">
 	<div class="complete-card">
 		<h2>Puzzle Completed!</h2>
-		<p>Congratulations! You've successfully completed the {levelId} puzzle.</p>
+		<p>Congratulations! You've successfully completed the {LEVELS[levelId].name} puzzle.</p>
 
 		<button class="new-game-btn" on:click={startNewGame}> New Game</button>
 	</div>
