@@ -57,21 +57,25 @@ export function detectChangedCell(
 	previousState: SudokuState,
 	currentState: SudokuState
 ): CellPosition {
-	let row = 0;
-	let col = 0;
-	for (let i = 0; i < 9; i++) {
-		for (let j = 0; j < 9; j++) {
-			if (
-				currentState.board[i][j] !== previousState.board[i][j] ||
-				!equals(currentState.notes[i][j], previousState.notes[i][j])
-			) {
-				row = i;
-				col = j;
-				break;
+	// Detect cell value change between two states
+	for (let row = 0; row < 9; row++) {
+		for (let col = 0; col < 9; col++) {
+			if (currentState.board[row][col] !== previousState.board[row][col]) {
+				return { row, col };
 			}
 		}
 	}
-	return { row, col };
+
+	// Detect cell note change between two states
+	for (let row = 0; row < 9; row++) {
+		for (let col = 0; col < 9; col++) {
+			if (!equals(currentState.notes[row][col], previousState.notes[row][col])) {
+				return { row, col };
+			}
+		}
+	}
+
+	return { row: 0, col: 0 };
 }
 
 export function calculateValueCounts(board: Board): number[] {
