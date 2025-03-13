@@ -112,6 +112,18 @@ export class SudokuViewModel {
 				newNotes[row][col][digit - 1] = !newNotes[row][col][digit - 1];
 			} else {
 				newBoard[row][col] = digit;
+
+				// Clear the notes of the same digit in the same row, column, and box
+				const boxStartRow = Math.floor(row / 3) * 3;
+				const boxStartCol = Math.floor(col / 3) * 3;
+				for (let i = 0; i < 9; i++) {
+					newNotes[row][i][digit - 1] = false;
+					newNotes[i][col][digit - 1] = false;
+
+					const r = boxStartRow + Math.floor(i / 3);
+					const c = boxStartCol + (i % 3);
+					newNotes[r][c][digit - 1] = false;
+				}
 			}
 
 			return {
