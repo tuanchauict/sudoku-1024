@@ -45,20 +45,16 @@
 	{#if cellValue}
 		<span class="cell-value">{cellValue}</span>
 	{:else}
-		{#if notes.some(note => note)}
-			<!-- Notes grid -->
-			<div class="notes-grid">
-				{#each Array(9).fill(null) as _, noteIndex}
-					{#if notes[noteIndex]}
-						<div class="note-cell">
-
-							<span class="note-value">{noteIndex + 1}</span>
-
-						</div>
-					{/if}
-				{/each}
-			</div>
-		{/if}
+		<!-- Notes grid -->
+		<div class="notes-grid">
+			{#each Array(9).fill(null) as _, noteIndex}
+				{#if notes[noteIndex]}
+					<div class="note-cell">
+						<span class="note-value">{noteIndex + 1}</span>
+					</div>
+				{/if}
+			{/each}
+		</div>
 	{/if}
 </div>
 
@@ -100,10 +96,14 @@
         font-weight: bold;
         color: var(--text-value);
         user-select: none;
-				font-family: monospace;
+        font-family: monospace;
 
-				@media (max-device-width: 500px) {
-					font-size: 1.2rem;
+        @media (max-device-width: 500px) {
+            font-size: 1.2rem;
+        }
+
+        @media (max-device-width: 380px) {
+            font-size: 1.1rem;
         }
     }
 
@@ -136,9 +136,9 @@
     .violated {
         background-color: var(--bg-cell-violated);
 
-				.cell-value {
+        .cell-value {
             color: var(--color-danger-text);
-				}
+        }
     }
 
     .initial .cell-value {

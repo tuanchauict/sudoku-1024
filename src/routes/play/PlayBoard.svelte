@@ -106,10 +106,10 @@
     }
 
     .border-bottom-thick {
-        border-bottom: 2px solid var(--border-color-strong);
+        border-bottom: 3.5px solid var(--border-color-strong);
     }
 
     .border-right-thick {
-        border-right: 2px solid var(--border-color-strong);
+        border-right: 3.5px solid var(--border-color-strong);
     }
 </style>
