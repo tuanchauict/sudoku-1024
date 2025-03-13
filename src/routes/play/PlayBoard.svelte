@@ -73,7 +73,7 @@
 
 <style>
     .sudoku-board {
-        border: 2px solid #000;
+        border: 2px solid var(--border-color-strong);
         display: flex;
         flex-direction: column;
         width: 100%;
@@ -91,8 +91,8 @@
     .cell {
         flex: 1;
         position: relative;
-        border-right: 1px solid #000;
-        border-bottom: 1px solid #000;
+        border-right: 1px solid var(--border-color-strong);
+        border-bottom: 1px solid var(--border-color-strong);
         cursor: pointer;
         overflow: visible;
     }
@@ -106,10 +106,10 @@
     }
 
     .border-bottom-thick {
-        border-bottom: 2px solid #000;
+        border-bottom: 2px solid var(--border-color-strong);
     }
 
     .border-right-thick {
-        border-right: 2px solid #000;
+        border-right: 2px solid var(--border-color-strong);
     }
 </style>

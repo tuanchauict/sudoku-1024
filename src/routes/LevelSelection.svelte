@@ -50,8 +50,8 @@
 				min-height: 100vh;
         padding-top: 24px;
 				padding-bottom: 3rem;
-        background-color: #f8fafc;
-				font-family: monospace;
+        background-color: var(--bg-primary);
+        font-family: monospace;
     }
 
     h1 {
@@ -59,25 +59,24 @@
         font-weight: 800;
         letter-spacing: 4px;
         margin-bottom: 8px;
-        color: #1e293b;
+        color: var(--text-primary);
         text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
     }
 
     .logo {
         width: 80px;
         height: 80px;
-        background-color: #3b82f6;
-        color: white;
+        background-color: var(--color-primary);
+        color: var(--text-on-primary);
         font-size: 48px;
         font-weight: bold;
         display: flex;
         align-items: center;
         justify-content: center;
         border-radius: 12px;
-				border: 0.5px solid black;
+        border: 0.5px solid var(--border-color-strong);
         margin-bottom: 36px;
-        box-shadow: 0 5px 15px -3px rgba(0, 0, 0, 0.4),
-        0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        box-shadow: var(--shadow-xl);
         text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
         position: relative;
         overflow: hidden;
@@ -108,18 +107,17 @@
     .levels-container {
         width: 100%;
         max-width: 320px;
-        background-color: white;
+        background-color: var(--bg-secondary);
         border-radius: 24px;
         padding: 24px;
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
-        0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        box-shadow: var(--shadow-lg);
     }
 
     h2 {
         font-size: 20px;
         margin-bottom: 20px;
 				margin-top: 0;
-        color: #475569;
+        color: var(--text-secondary);
         text-align: center;
         font-weight: 600;
     }

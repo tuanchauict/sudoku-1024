@@ -78,12 +78,13 @@
         font-weight: bold;
         text-align: center;
         margin: 10px 0 0;
+        color: var(--text-primary);
     }
 
     h2 {
         font-size: 0.8rem;
         font-weight: normal;
-        color: #888;
+        color: var(--text-tertiary);
         margin: 2px 0 0;
     }
 
@@ -92,9 +93,13 @@
         background-color: transparent;
         border: none;
         font-size: 16px;
-        color: #3b82f6;
+        color: var(--color-primary);
         cursor: pointer;
         padding: 8px;
         left: 0;
+
+        &:hover {
+            color: var(--color-secondary);
+        }
     }
 </style>

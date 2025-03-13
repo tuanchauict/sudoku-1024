@@ -110,67 +110,68 @@
 </div>
 
 <style>
-	.container {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		padding: 12px;
-		font-family: Arial, sans-serif;
-		max-width: 100%;
-		margin: 0 auto;
-		width: 100%;
-		box-sizing: border-box;
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 12px;
+        font-family: Arial, sans-serif;
+        max-width: 100%;
+        margin: 0 auto;
+        width: 100%;
+        box-sizing: border-box;
+        background-color: var(--bg-primary);
 
-		&.wide-layout {
-			max-width: 900px;
-		}
-	}
+        &.wide-layout {
+            max-width: 900px;
+        }
+    }
 
-	.game-content {
-		display: flex;
-		flex-direction: column;
-		width: 100%;
-		align-items: center;
-		gap: 16px;
+    .game-content {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+        gap: 16px;
 
-		&.wide-layout {
-			flex-direction: row;
-		}
-	}
+        &.wide-layout {
+            flex-direction: row;
+        }
+    }
 
-	.board-container {
-		width: 100%;
+    .board-container {
+        width: 100%;
 
-		&.square-layout {
-			max-width: min(100vh - 330px, 80vmin);
-		}
-	}
+        &.square-layout {
+            max-width: min(100vh - 330px, 80vmin);
+        }
+    }
 
-	.wide-layout .board-container {
-		width: 65%;
-		max-width: 75vmin;
-	}
+    .wide-layout .board-container {
+        width: 65%;
+        max-width: 75vmin;
+    }
 
-	.controls-container {
-		display: flex;
-		flex-direction: column;
-		width: 100%;
-		align-items: center;
-	}
+    .controls-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+    }
 
-	.wide-layout .controls-container {
-		width: 35%;
-		padding-left: 16px;
-	}
+    .wide-layout .controls-container {
+        width: 35%;
+        padding-left: 16px;
+    }
 
-	@media (max-width: 600px) {
-		.container {
-			padding: 8px;
-		}
+    @media (max-width: 600px) {
+        .container {
+            padding: 8px;
+        }
 
-		.game-content {
-			flex-direction: column;
-			gap: 8px;
-		}
-	}
+        .game-content {
+            flex-direction: column;
+            gap: 8px;
+        }
+    }
 </style>

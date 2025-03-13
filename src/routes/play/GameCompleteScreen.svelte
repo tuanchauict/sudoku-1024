@@ -30,7 +30,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: rgba(0, 0, 0, 0.7);
+        background-color: var(--overlay-bg);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -39,18 +39,18 @@
     }
 
     .complete-card {
-        background-color: white;
+        background-color: var(--bg-secondary);
         border-radius: 12px;
         padding: 24px;
         text-align: center;
         max-width: 400px;
         width: 80%;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        box-shadow: var(--shadow-game-card);
         animation: slideIn 0.4s ease-out;
     }
 
     h2 {
-        color: #3b82f6;
+        color: var(--color-primary);
         font-size: 24px;
         margin-top: 0;
         font-family: monospace;
@@ -58,15 +58,15 @@
 
     p {
         font-size: 16px;
-        color: #4b5563;
+        color: var(--text-secondary);
         margin-bottom: 24px;
         line-height: 1.5;
         font-family: monospace;
     }
 
     .new-game-btn {
-        background-color: #3b82f6;
-        color: white;
+        background-color: var(--color-primary);
+        color: var(--text-on-primary);
         font-size: 18px;
         font-weight: bold;
         padding: 12px 28px;
@@ -75,10 +75,10 @@
         cursor: pointer;
         transition: background-color 0.2s;
         font-family: monospace;
-    }
 
-    .new-game-btn:hover {
-        background-color: #2563eb;
+        &:hover {
+            background-color: var(--color-secondary);
+        }
     }
 
     @keyframes fadeIn {

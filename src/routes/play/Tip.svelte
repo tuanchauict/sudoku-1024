@@ -15,8 +15,18 @@
     .tip {
 				font-family: monospace;
         font-size: 14px;
-        color: #666;
+        color: var(--text-muted);
         margin-bottom: 12px;
         text-align: center;
+    }
+
+    .tip a {
+        color: var(--color-primary);
+        text-decoration: none;
+    }
+
+    .tip a:hover {
+        text-decoration: underline;
+        color: var(--color-secondary);
     }
 </style>

@@ -57,7 +57,7 @@
 		{/each}
 
 		<button
-			class="btn digit-button clear-btn"
+			class="btn clear-btn"
 			disabled={!isClearable}
 			on:click={() => viewModel.clearSelectedCell()}
 		>
@@ -103,9 +103,9 @@
         align-items: center;
         justify-content: center;
         font-family: monospace;
-        color: black;
-        background-color: #f0f0f0;
-        border: 1px solid #ccc;
+        color: var(--text-button);
+        background-color: var(--bg-button);
+        border: 1px solid var(--border-color);
         border-radius: 4px;
         cursor: pointer;
 
@@ -123,11 +123,7 @@
 
         &:disabled {
             opacity: 0.5;
-            color: #999;
-        }
-
-				&:hover:not(.disabled) {
-            background-color: #e0e0e0;
+            color: var(--text-button-disabled);
         }
 		}
 
@@ -144,6 +140,10 @@
 				&:disabled {
 						cursor: not-allowed;
 				}
+
+        &:hover:not(.disabled) {
+            background-color: var(--bg-button-hover);
+        }
     }
 
     @media (min-width: 768px) {
@@ -158,20 +158,22 @@
     }
 
     .clear-btn {
-        color: #4b5563;
+        color: var(--text-secondary);
+        width: calc(20% - 8px);
+        aspect-ratio: 1;
         font-size: 1.4rem;
 
 				&:active {
-            background-color: #fecaca;
+            background-color: var(--bg-clear-active);
         }
 
 				&:hover {
-            background-color: #fee2e2;
-            color: #ef4444;
+            background-color: var(--bg-clear-hover);
+            color: var(--color-danger);
 
 						&:disabled {
-								background-color: #f3f4f6;
-								color: #999;
+                background-color: var(--bg-button);
+                color: var(--text-button-disabled);
             }
 				}
 
@@ -205,20 +207,20 @@
     }
 
     .note-btn {
-        background-color: #f3f4f6;
+        background-color: var(--bg-note-btn);
 
         &:hover {
-            background-color: #dbeafe;
-            color: #3b82f6;
+            background-color: var(--bg-note-btn-hover);
+            color: var(--color-primary);
         }
 
         &.active {
-            background-color: #3b82f6;
-            color: white;
-						border-color: #3b82f6;
+            background-color: var(--bg-note-btn-active);
+            color: var(--text-on-primary);
+            border-color: var(--color-primary);
 
             &:hover {
-                background-color: #2563eb;
+                background-color: var(--bg-note-btn-active-hover);
             }
         }
     }

@@ -74,31 +74,31 @@
     }
 
     .same-box {
-        background-color: #eff4fa;
+        background-color: var(--bg-cell-same-box);
     }
 
     .same-line {
-        background-color: #f0f7ff;
+        background-color: var(--bg-cell-same-line);
     }
 
     .same-value {
-        background-color: #fff8da;
+        background-color: var(--bg-cell-same-value);
     }
 
     .selected {
-        outline: 4px solid #21cb65CC;
+        outline: 4px solid var(--color-success);
         position: relative;
         z-index: 1;
-        background-color: #fff5ce;
+        background-color: var(--bg-cell-selected);
     }
 
     .complete {
-        color: #059669;
+        color: var(--color-success-text);
     }
 
     .cell-value {
         font-weight: bold;
-        color: rgb(26, 95, 255);
+        color: var(--text-value);
         user-select: none;
 				font-family: monospace;
 
@@ -129,19 +129,19 @@
 
     .note-value {
         font-size: 0.8rem;
-        color: #3b82f6;
+        color: var(--text-note);
         font-family: monospace;
     }
 
     .violated {
-        background-color: #fcd3d3;
-    }
+        background-color: var(--bg-cell-violated);
 
-    .violated .cell-value {
-        color: #ca0000;
+				.cell-value {
+            color: var(--color-danger-text);
+				}
     }
 
     .initial .cell-value {
-        color: black;
+        color: var(--text-value-initial);
     }
 </style>
