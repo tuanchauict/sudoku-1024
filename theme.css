@@ -1,0 +1,116 @@
+:root {
+    /* Background colors */
+    --bg-primary: #f8fafc;
+    --bg-secondary: #ffffff;
+    --bg-button: #f0f0f0;
+    --bg-button-hover: #e0e0e0;
+    --bg-note-btn: #f3f4f6;
+    --bg-note-btn-hover: #dbeafe;
+    --bg-note-btn-active: #3b82f6;
+    --bg-note-btn-active-hover: #2563eb;
+    --bg-clear-hover: #fee2e2;
+    --bg-clear-active: #fecaca;
+
+    /* Cell background colors */
+    --bg-cell-normal: transparent;
+    --bg-cell-same-box: #eff4fa;
+    --bg-cell-same-line: #f0f7ff;
+    --bg-cell-same-value: #fff8da;
+    --bg-cell-selected: #fff5ce;
+    --bg-cell-violated: #fcd3d3;
+
+    /* Accent colors */
+    --color-primary: #3b82f6;
+    --color-secondary: #2563eb;
+    --color-success: #21cb65;
+    --color-success-text: #059669;
+    --color-danger: #ef4444;
+    --color-danger-text: #ca0000;
+
+    /* Text colors */
+    --text-primary: #1e293b;
+    --text-secondary: #4b5563;
+    --text-tertiary: #888888;
+    --text-muted: #666666;
+    --text-button: black;
+    --text-button-disabled: #999999;
+    --text-value: rgb(26, 95, 255);
+    --text-value-initial: black;
+    --text-note: #3b82f6;
+    --text-on-primary: white;
+    --text-action: #4b5563;
+    --text-action-disabled: #999999;
+    --text-note-btn-hover: #3b82f6;
+
+    /* Border colors */
+    --border-color: #cccccc;
+    --border-color-strong: #000000;
+
+    /* Overlay */
+    --overlay-bg: rgba(0, 0, 0, 0.7);
+
+    /* Shadows */
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --shadow-xl: 0 5px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-game-card: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Add this to theme.css */
+.dark-mode {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-button: #334155;
+    --bg-button-hover: #475569;
+    --bg-note-btn: #334155;
+    --bg-note-btn-hover: #1e40af;
+    --bg-note-btn-active: #3b82f6;
+    --bg-note-btn-active-hover: #60a5fa;
+    --bg-clear-hover: #7f1d1d;
+    --bg-clear-active: #991b1b;
+
+    /* Cell background colors */
+    --bg-cell-normal: transparent;
+    --bg-cell-same-box: #203451;
+    --bg-cell-same-line: #203451;
+    --bg-cell-same-value: #093b85;
+    --bg-cell-selected: #854d0e;
+    --bg-cell-violated: #7f1d1d;
+
+    /* Accent colors */
+    --color-primary: #3b82f6;
+    --color-secondary: #60a5fa;
+    --color-success: #10b981;
+    --color-success-text: #34d399;
+    --color-danger: #ef4444;
+    --color-danger-text: #ffea00;
+
+    /* Text colors */
+    --text-primary: #f8fafc;
+    --text-secondary: #e2e8f0;
+    --text-tertiary: #94a3b8;
+    --text-muted: #cbd5e1;
+    --text-button: #f8fafc;
+    --text-button-disabled: #64748b;
+    --text-value: #6aff55;
+    --text-value-initial: #e2e8f0;
+    --text-note: #6aff55;
+    --text-on-primary: #f8fafc;
+    --text-action: white;
+    --text-action-disabled: #999999;
+    --text-note-btn-hover: #FFFFFF;
+
+    /* Border colors */
+    --border-color: #475569;
+    --border-color-strong: #f8fafc;
+
+    /* Overlay */
+    --overlay-bg: rgba(0, 0, 0, 0.8);
+}
+
+html {
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-primary);
+}
