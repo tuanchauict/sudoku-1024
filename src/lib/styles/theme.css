@@ -38,6 +38,9 @@
     --text-value-initial: black;
     --text-note: #3b82f6;
     --text-on-primary: white;
+    --text-action: #4b5563;
+    --text-action-disabled: #999999;
+    --text-note-btn-hover: #3b82f6;
 
     /* Border colors */
     --border-color: #cccccc;
@@ -52,64 +55,6 @@
     --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     --shadow-xl: 0 5px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     --shadow-game-card: 0 10px 25px rgba(0, 0, 0, 0.2);
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        /* Background colors */
-        --bg-primary: #0f172a;
-        --bg-secondary: #1e293b;
-        --bg-button: #334155;
-        --bg-button-hover: #475569;
-        --bg-note-btn: #334155;
-        --bg-note-btn-hover: #1e40af;
-        --bg-note-btn-active: #3b82f6;
-        --bg-note-btn-active-hover: #60a5fa;
-        --bg-clear-hover: #7f1d1d;
-        --bg-clear-active: #991b1b;
-
-        /* Cell background colors */
-        --bg-cell-normal: transparent;
-        --bg-cell-same-box: #2c466e;
-        --bg-cell-same-line: #2c466e;
-        --bg-cell-same-value: #713f12;
-        --bg-cell-selected: #854d0e;
-        --bg-cell-violated: #7f1d1d;
-
-        /* Accent colors */
-        --color-primary: #3b82f6;
-        --color-secondary: #60a5fa;
-        --color-success: #10b981;
-        --color-success-text: #34d399;
-        --color-danger: #ef4444;
-        --color-danger-text: #f87171;
-
-        /* Text colors */
-        --text-primary: #f8fafc;
-        --text-secondary: #e2e8f0;
-        --text-tertiary: #94a3b8;
-        --text-muted: #cbd5e1;
-        --text-button: #f8fafc;
-        --text-button-disabled: #64748b;
-        --text-value: #93c5fd;
-        --text-value-initial: #e2e8f0;
-        --text-note: #60a5fa;
-        --text-on-primary: #f8fafc;
-
-        /* Border colors */
-        --border-color: #475569;
-        --border-color-strong: #f8fafc;
-
-        /* Overlay */
-        --overlay-bg: rgba(0, 0, 0, 0.8);
-
-        /* Shadows */
-        --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-        --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
-        --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
-        --shadow-xl: 0 5px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
-        --shadow-game-card: 0 10px 25px rgba(0, 0, 0, 0.4);
-    }
 }
 
 /* Add this to theme.css */
@@ -127,9 +72,9 @@
 
     /* Cell background colors */
     --bg-cell-normal: transparent;
-    --bg-cell-same-box: #2c466e;
-    --bg-cell-same-line: #2c466e;
-    --bg-cell-same-value: #713f12;
+    --bg-cell-same-box: #203451;
+    --bg-cell-same-line: #203451;
+    --bg-cell-same-value: #093b85;
     --bg-cell-selected: #854d0e;
     --bg-cell-violated: #7f1d1d;
 
@@ -139,7 +84,7 @@
     --color-success: #10b981;
     --color-success-text: #34d399;
     --color-danger: #ef4444;
-    --color-danger-text: #f87171;
+    --color-danger-text: #ffea00;
 
     /* Text colors */
     --text-primary: #f8fafc;
@@ -148,10 +93,13 @@
     --text-muted: #cbd5e1;
     --text-button: #f8fafc;
     --text-button-disabled: #64748b;
-    --text-value: #93c5fd;
+    --text-value: #6aff55;
     --text-value-initial: #e2e8f0;
-    --text-note: #60a5fa;
+    --text-note: #6aff55;
     --text-on-primary: #f8fafc;
+    --text-action: white;
+    --text-action-disabled: #999999;
+    --text-note-btn-hover: #FFFFFF;
 
     /* Border colors */
     --border-color: #475569;

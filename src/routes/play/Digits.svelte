@@ -197,12 +197,16 @@
         gap: 8px;
         font-size: 1rem;
         transition: all 0.2s;
-        color: #4b5563;
+        color: var(--text-action);
         width: 100%;
 
         &:disabled {
-            color: #999;
+            color: var(--text-action-disabled);
 						cursor: auto;
+        }
+
+				&:hover:not(:disabled) {
+            background-color: var(--bg-button-hover);
         }
     }
 
@@ -211,7 +215,7 @@
 
         &:hover {
             background-color: var(--bg-note-btn-hover);
-            color: var(--color-primary);
+            color: var(--text-note-btn-hover);
         }
 
         &.active {
