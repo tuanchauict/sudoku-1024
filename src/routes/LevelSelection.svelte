@@ -3,6 +3,7 @@
 	import { generator } from '$lib/Generator';
 	import { type Level, LEVELS } from '$lib/models';
 	import { appUrl } from '$lib/appUrl';
+	import DarkModeToggle from '../components/DarkModeToggle.svelte';
 
 	const logo = appUrl('/logo.png');
 
@@ -39,7 +40,7 @@
 		</div>
 	</div>
 </div>
-
+<DarkModeToggle />
 <style>
     .container {
         display: flex;

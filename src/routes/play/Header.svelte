@@ -16,6 +16,10 @@
 		goto(appUrl('/'));
 	}
 
+	function clearBoard() {
+		viewModel.clearBoard();
+	}
+
 	onMount(() => {
 		const interval = setInterval(() => {
 			if (!gameComplete) {
@@ -47,7 +51,7 @@
 		<h1>{LEVELS[levelId].name}</h1>
 		<h2>{readableTime}</h2>
 	</div>
-<!--	<button class="clear-btn" on:click={clearBoard}>Reset</button>-->
+	<button class="clear-btn" on:click={clearBoard}>Reset</button>
 </div>
 
 <style>
@@ -94,8 +98,8 @@
         padding: 8px;
         left: 0;
 
-        &:hover {
+				&:hover {
             color: var(--color-secondary);
-        }
+				}
     }
 </style>
