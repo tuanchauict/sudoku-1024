@@ -1,0 +1,1 @@
+import{t as o,j as a,i as e,v as c,l as u}from"./DIEbNu-8.js";function s(t){e===null&&o(),c&&e.l!==null?l(e).m.push(t):a(()=>{const n=u(t);if(typeof n=="function")return n})}function l(t){var n=t.l;return n.u??(n.u={a:[],b:[],m:[]})}export{s as o};
