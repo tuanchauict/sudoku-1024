@@ -40,7 +40,7 @@
 		</div>
 	</div>
 </div>
-<DarkModeToggle />
+<DarkModeToggle isVisible="{true}" />
 <style>
     .container {
         display: flex;
