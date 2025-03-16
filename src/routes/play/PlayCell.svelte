@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { getSudokuViewModel } from '$lib/sudokuContext';
 	import type { CellPosition } from '$lib/models';
+	import { onMount } from 'svelte';
 
 	export let rowIndex: number;
 	export let colIndex: number;
@@ -13,9 +14,9 @@
 
 	$: isViolated = violatedCells.some(cell => cell.row === rowIndex && cell.col === colIndex);
 
-
-	// Get the ViewModel from context
 	const viewModel = getSudokuViewModel();
+
+	let isInNoteMode: boolean = false;
 
 	// Use ViewModel for these calculations
 	function isSameBox(row: number, col: number) {
@@ -25,12 +26,23 @@
 	function hasSameValue(row: number, col: number) {
 		return viewModel.hasSameValue(row, col);
 	}
+
+	onMount(() => {
+		const unsubNoteMode = viewModel.noteMode.subscribe((value) => {
+			isInNoteMode = value;
+		});
+
+		return () => {
+			unsubNoteMode();
+		};
+	})
 </script>
 
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div class="cell"
+		 class:note-mode={isInNoteMode}
 		 class:selected={selectedCell.row === rowIndex && selectedCell.col === colIndex}
 		 class:same-line={selectedCell.row === rowIndex || selectedCell.col === colIndex}
 		 class:same-box={isSameBox(rowIndex, colIndex) &&
@@ -86,6 +98,10 @@
         position: relative;
         z-index: 1;
         background-color: var(--bg-cell-selected);
+
+				&.note-mode {
+						outline-color: var(--color-selected-cell-note);
+				}
     }
 
     .complete {
