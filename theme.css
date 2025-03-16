@@ -26,6 +26,7 @@
     --color-success-text: #059669;
     --color-danger: #ef4444;
     --color-danger-text: #ca0000;
+    --color-selected-cell-note: #2563eb;
 
     /* Text colors */
     --text-primary: #1e293b;
@@ -85,6 +86,7 @@
     --color-success-text: #34d399;
     --color-danger: #ef4444;
     --color-danger-text: #ffea00;
+    --color-selected-cell-note: #ffea00;
 
     /* Text colors */
     --text-primary: #f8fafc;
