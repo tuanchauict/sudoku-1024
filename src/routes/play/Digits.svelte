@@ -45,10 +45,11 @@
 	<div class="digits-container">
 		{#each Array(9).fill(null) as _, i (i)}
 			{@const digit = i + 1}
-			{@const count = valueCounts[i+1]}
+			{@const count = valueCounts[i + 1]}
 			<button
 				class="btn digit-button"
 				class:disabled={count >= 9}
+				tabindex="-1"
 				on:click={() => handleDigitClick(digit)}
 				disabled={count >= 9}
 			>
@@ -59,6 +60,7 @@
 		<button
 			class="btn clear-btn"
 			disabled={!isClearable}
+			tabindex="-1"
 			on:click={() => viewModel.clearSelectedCell()}
 		>
 			<span>&#10005;</span>
@@ -66,11 +68,19 @@
 	</div>
 
 	<div class="actions-container">
-		<button class="btn action-button" disabled={!canUndo} on:click={() => viewModel.undo()}>
+		<button
+			class="btn action-button"
+			disabled={!canUndo}
+			tabindex="-1"
+			on:click={() => viewModel.undo()}>
 			<UndoIcon />
 			<span>Undo</span>
 		</button>
-		<button class="btn action-button note-btn" class:active={noteMode} on:click={() => viewModel.toggleNoteMode()}>
+		<button
+			class="btn action-button note-btn"
+			class:active={noteMode}
+			tabindex="-1"
+			on:click={() => viewModel.toggleNoteMode()}>
 			<NoteIcon />
 			<span>Note</span>
 		</button>
@@ -98,7 +108,7 @@
         max-width: 300px;
     }
 
-		.btn {
+    .btn {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -125,7 +135,7 @@
             opacity: 0.5;
             color: var(--text-button-disabled);
         }
-		}
+    }
 
     .digit-button {
         width: calc(20% - 8px);
@@ -133,13 +143,13 @@
         font-size: 1.4rem;
         position: relative;
 
-				&:active {
+        &:active {
             transition: background-color 0.1s;
-				}
+        }
 
-				&:disabled {
-						cursor: not-allowed;
-				}
+        &:disabled {
+            cursor: not-allowed;
+        }
 
         &:hover:not(.disabled) {
             background-color: var(--bg-button-hover);
@@ -163,24 +173,24 @@
         aspect-ratio: 1;
         font-size: 1.4rem;
 
-				&:active {
+        &:active {
             background-color: var(--bg-clear-active);
         }
 
-				&:hover {
+        &:hover {
             background-color: var(--bg-clear-hover);
             color: var(--color-danger);
 
-						&:disabled {
+            &:disabled {
                 background-color: var(--bg-button);
                 color: var(--text-button-disabled);
             }
-				}
+        }
 
-				&:disabled {
-						opacity: 0.5;
-						cursor: not-allowed;
-				}
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
     }
 
     .actions-container {
@@ -202,10 +212,10 @@
 
         &:disabled {
             color: var(--text-action-disabled);
-						cursor: auto;
+            cursor: auto;
         }
 
-				&:hover:not(:disabled) {
+        &:hover:not(:disabled) {
             background-color: var(--bg-button-hover);
         }
     }
